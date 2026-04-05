@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel | Billy Joe Cruzada Portfolio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" type="image/jpeg" href="Billy ID.jpg">
+</head>
+<body>
+    <!-- Toast Notification -->
+    <div class="toast" id="toast">
+        <span id="toastMessage">Saved successfully!</span>
+    </div>
+
+    <!-- Confirmation Modal -->
+    <div class="modal-overlay" id="confirmModal">
+        <div class="modal-content">
+            <h3>Confirm Changes</h3>
+            <div class="changes-list" id="changesList">
+                <!-- Populated by JavaScript -->
+            </div>
+            <div class="modal-buttons">
+                <button class="btn btn-secondary" id="cancelSave">Cancel</button>
+                <button class="btn btn-primary" id="confirmSave">Confirm Save</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Login Page -->
+    <div class="login-container" id="loginPage">
+        <div class="login-card">
+            <h2 class="gradient-text">Admin Login</h2>
+            <form id="loginForm">
+                <div class="form-group">
+                    <input type="text" id="username" placeholder="Username" required>
+                </div>
+                <div class="form-group">
+                    <input type="password" id="password" placeholder="Password" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Login</button>
+                <p class="login-error" id="loginError">Invalid username or password</p>
+            </form>
+        </div>
+    </div>
+
+    <!-- Admin Dashboard -->
+    <div class="admin-container" id="adminDashboard" style="display: none;">
+        <div class="admin-header">
+            <h1 class="gradient-text">Portfolio Admin</h1>
+            <div style="display: flex; gap: 16px; align-items: center;">
+                <a href="index.html" class="btn btn-primary" target="_blank" style="text-decoration: none;">View Site</a>
+                <button class="btn btn-danger" id="logoutBtn">Logout</button>
+            </div>
+        </div>
+
+        <div class="admin-nav">
+            <button class="admin-nav-btn active" data-section="profile">Profile</button>
+            <button class="admin-nav-btn" data-section="social">Social Links</button>
+            <button class="admin-nav-btn" data-section="featured">Featured Artworks</button>
+            <button class="admin-nav-btn" data-section="showcases">Showcases</button>
+            <button class="admin-nav-btn" data-section="gallery">Gallery</button>
+            <button class="admin-nav-btn" data-section="services">Services</button>
+            <button class="admin-nav-btn" data-section="about">About</button>
+            <button class="admin-nav-btn" data-section="experience">Experience</button>
+        </div>
+
+        <!-- Profile Section -->
+        <div class="admin-section active" id="profileSection">
+            <div class="admin-card">
+                <h3>Profile Information</h3>
+                <div class="form-row">
+                    <div class="form-group-admin">
+                        <label>Name</label>
+                        <input type="text" id="adminName" value="Billy Joe Cruzada">
+                    </div>
+                    <div class="form-group-admin">
+                        <label>Title</label>
+                        <input type="text" id="adminTitle" value="Graphic Designer | Photographer | Photo Editor | Generative AI Specialist">
+                    </div>
+                </div>
+                <div class="form-group-admin">
+                    <label>Brief Bio</label>
+                    <textarea id="adminBio" rows="3">Creative professional with 5+ years of experience specializing in brand identity, digital design, and creative direction.</textarea>
+                </div>
+                <div class="form-group-admin">
+                    <label>Profile Image</label>
+                    <div class="image-upload-area" id="profileUploadArea">
+                        <p>Click to upload profile image</p>
+                        <span>Supports up to 25MB images</span>
+                        <input type="file" id="profileImageInput" accept="image/*">
+                        <img id="profilePreview" class="upload-preview" style="display: none;">
+                    </div>
+                    <div class="upload-progress" id="profileUploadProgress">
+                        <div class="upload-progress-bar"></div>
+                    </div>
+                </div>
+                <button class="btn btn-primary" data-save="profile">Save Profile</button>
+            </div>
+        </div>
+
+        <!-- Social Links Section -->
+        <div class="admin-section" id="socialSection">
+            <div class="admin-card">
+                <h3>Social Media Links</h3>
+                <div class="form-row">
+                    <div class="form-group-admin">
+                        <label>Instagram URL</label>
+                        <input type="url" id="adminInstagram" value="https://www.instagram.com/ezii_yooow">
+                    </div>
+                    <div class="form-group-admin">
+                        <label>LinkedIn URL</label>
+                        <input type="url" id="adminLinkedin" value="https://linkedin.com/in/iam-billycruzada/">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group-admin">
+                        <label>Behance URL</label>
+                        <input type="url" id="adminBehance" value="https://behance.net/billyjoeCrzGraphx">
+                    </div>
+                    <div class="form-group-admin">
+                        <label>Email Address</label>
+                        <input type="email" id="adminEmail" value="billyjoecruzada12@gmail.com">
+                    </div>
+                </div>
+                <button class="btn btn-primary" data-save="social">Save Social Links</button>
+            </div>
+        </div>
+
+        <!-- Featured Artworks Section -->
+        <div class="admin-section" id="featuredSection">
+            <div class="admin-card">
+                <h3>Featured Artworks</h3>
+                <p style="color: var(--text-secondary); margin-bottom: 16px; font-size: 14px;">Click an image to delete it. Supports up to 25MB images.</p>
+                <div class="admin-gallery" id="featuredGallery">
+                    <!-- Populated by JavaScript -->
+                </div>
+                <div class="image-upload-area" id="featuredUploadArea" style="margin-top: 20px;">
+                    <p>Add new featured artwork</p>
+                    <span>Select multiple images (up to 25MB each)</span>
+                    <input type="file" id="featuredImageInput" accept="image/*" multiple>
+                </div>
+                <div class="upload-progress" id="featuredUploadProgress">
+                    <div class="upload-progress-bar"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Showcases Section -->
+        <div class="admin-section" id="showcasesSection">
+            <div class="admin-card">
+                <h3>Project Showcases</h3>
+                <p style="color: var(--text-secondary); margin-bottom: 16px; font-size: 14px;">Create and manage project showcases. Each showcase can contain multiple images.</p>
+                
+                <!-- Add New Showcase -->
+                <div style="background: var(--bg-primary); padding: 20px; border-radius: 12px; margin-bottom: 24px;">
+                    <h4 style="margin-bottom: 16px; font-size: 16px;">Add New Showcase</h4>
+                    <div class="form-row">
+                        <div class="form-group-admin">
+                            <label>Project Title</label>
+                            <input type="text" id="newShowcaseTitle" placeholder="e.g., Brand Identity Project">
+                        </div>
+                        <div class="form-group-admin">
+                            <label>Category</label>
+                            <select id="newShowcaseCategory">
+                                <option value="Branding">Branding</option>
+                                <option value="Digital Art">Digital Art</option>
+                                <option value="Photography">Photography</option>
+                                <option value="Print">Print</option>
+                                <option value="Editorial">Editorial</option>
+                                <option value="Generative AI">Generative AI</option>
+                                <option value="Food Product Design">Food Product Design</option>
+                                <option value="Health & Wellness">Health & Wellness</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group-admin">
+                            <label>Tools Used (comma separated)</label>
+                            <input type="text" id="newShowcaseTools" placeholder="e.g., Ai, Ps, Pr">
+                        </div>
+                    </div>
+                    <div class="toggle-wrapper">
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="newShowcaseVisible" checked>
+                            <span class="toggle-slider"></span>
+                        </label>
+                        <span class="toggle-label">Show on landing page</span>
+                    </div>
+                    <div class="toggle-wrapper">
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="newShowcaseNSFW">
+                            <span class="toggle-slider"></span>
+                        </label>
+                        <span class="toggle-label">Mark as +18/NSFW (content will be blurred on main page)</span>
+                    </div>
+                    <div class="image-upload-area" id="showcaseUploadArea" style="padding: 30px;">
+                        <p>Add images for this showcase</p>
+                        <span>Select multiple images (up to 25MB each)</span>
+                        <input type="file" id="showcaseImageInput" accept="image/*" multiple>
+                        <div id="showcaseTempImages" style="display: flex; flex-wrap: wrap; gap: 12px; margin-top: 16px;"></div>
+                    </div>
+                    <div class="upload-progress" id="showcaseUploadProgress">
+                        <div class="upload-progress-bar"></div>
+                    </div>
+                    <button class="btn btn-primary" id="addShowcaseBtn" style="margin-top: 16px;">Add Showcase</button>
+                </div>
+
+                <!-- Existing Showcases -->
+                <div id="showcasesList">
+                    <!-- Populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Gallery Section -->
+        <div class="admin-section" id="gallerySection">
+            <div class="admin-card">
+                <h3>Gallery Images</h3>
+                <p style="color: var(--text-secondary); margin-bottom: 16px; font-size: 14px;">Click an image to delete it. Supports up to 25MB images.</p>
+                <div class="admin-gallery" id="adminGallery">
+                    <!-- Populated by JavaScript -->
+                </div>
+                <div class="image-upload-area" id="galleryUploadArea" style="margin-top: 20px;">
+                    <p>Add new gallery images</p>
+                    <span>Select multiple images (up to 25MB each)</span>
+                    <input type="file" id="galleryImageInput" accept="image/*" multiple>
+                        <label style="margin-top: 12px; display: block;">
+                         Category:
+                         <select id="galleryCategory" style="margin-left: 8px; padding: 8px; background: var(--bg-tertiary); border: none; border-radius: 4px; color: white;">
+                             <option value="portrait">Portrait</option>
+                             <option value="food">Food</option>
+                             <option value="street">Street</option>
+                             <option value="sports">Sports</option>
+                         </select>
+                     </label>
+                </div>
+                <div class="upload-progress" id="galleryUploadProgress">
+                    <div class="upload-progress-bar"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Services Section -->
+        <div class="admin-section" id="servicesSection">
+            <div class="admin-card">
+                <h3>Services</h3>
+                <p style="color: var(--text-secondary); margin-bottom: 16px; font-size: 14px;">Edit your service offerings.</p>
+                <div id="servicesList">
+                    <!-- Populated by JavaScript -->
+                </div>
+                <button class="btn btn-primary" data-save="services">Save Services</button>
+            </div>
+        </div>
+
+        <!-- About Section -->
+        <div class="admin-section" id="aboutSection">
+            <div class="admin-card">
+                <h3>About Section</h3>
+                <div class="form-group-admin">
+                    <label>Quote</label>
+                    <input type="text" id="adminAboutQuote" value="Design is not just what it looks like. Design is how it works.">
+                </div>
+                <div class="form-group-admin">
+                    <label>Bio</label>
+                    <textarea id="adminAboutBio" rows="4">Creative professional with 5+ years of experience specializing in brand identity, digital design, and creative direction.</textarea>
+                </div>
+                <div class="form-group-admin">
+                    <label>Location</label>
+                    <input type="text" id="adminAboutLocation" value="Based on Tarlac, Philippines">
+                </div>
+                <div class="toggle-wrapper">
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="adminAboutBioVisible" checked>
+                        <span class="toggle-slider"></span>
+                    </label>
+                    <span class="toggle-label">Show bio text on landing page</span>
+                </div>
+                <button class="btn btn-primary" data-save="about">Save About</button>
+            </div>
+        </div>
+
+        <!-- Experience Section -->
+        <div class="admin-section" id="experienceSection">
+            <div class="admin-card">
+                <h3>Work Experience</h3>
+                <div id="experienceList">
+                    <!-- Populated by JavaScript -->
+                </div>
+                <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--bg-tertiary);">
+                    <h4 style="margin-bottom: 16px; font-size: 16px;">Add New Experience</h4>
+                    <div class="form-row">
+                        <div class="form-group-admin">
+                            <label>Company</label>
+                            <input type="text" id="newExpCompany" placeholder="Company Name">
+                        </div>
+                        <div class="form-group-admin">
+                            <label>Role</label>
+                            <input type="text" id="newExpRole" placeholder="Your Role">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group-admin">
+                            <label>Period</label>
+                            <input type="text" id="newExpPeriod" placeholder="e.g., 2022 - Present">
+                        </div>
+                        <div class="form-group-admin">
+                            <label>Description</label>
+                            <input type="text" id="newExpDesc" placeholder="Brief description">
+                        </div>
+                    </div>
+                    <button class="btn btn-primary" id="addExperience">Add Experience</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="admin.js"></script>
+</body>
+</html>
