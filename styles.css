@@ -1212,6 +1212,52 @@ section {
     height: 20px;
 }
 
+.telegram-card {
+    margin-top: 24px;
+    padding: 20px;
+    background: linear-gradient(135deg, rgba(0, 136, 204, 0.15), rgba(0, 136, 204, 0.05));
+    border: 1px solid rgba(0, 136, 204, 0.3);
+    border-radius: var(--border-radius);
+}
+
+.telegram-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+    color: #0088cc;
+    font-weight: 600;
+}
+
+.telegram-header svg {
+    width: 24px;
+    height: 24px;
+}
+
+.telegram-link {
+    display: block;
+    color: var(--text-primary);
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 15px;
+    margin-bottom: 6px;
+}
+
+.telegram-link:hover {
+    color: #0088cc;
+}
+
+.telegram-phone {
+    display: block;
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.telegram-phone:hover {
+    color: var(--text-primary);
+}
+
 /* Contact Form */
 .contact-form {
     display: flex;

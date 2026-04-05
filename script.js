@@ -474,20 +474,35 @@ showcasesGrid.addEventListener('click', (e) => {
     }
 });
 
-// Contact Form
-contactForm.addEventListener('submit', (e) => {
+// Contact Form with Formspree
+contactForm.addEventListener('submit', async (e) => {
     e.preventDefault();
-    const name = document.getElementById('name').value;
-    const email = document.getElementById('email').value;
-    const message = document.getElementById('message').value;
-
-    if (name && email && message) {
-        const subject = encodeURIComponent(`Portfolio Inquiry from ${name}`);
-        const body = encodeURIComponent(`Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`);
-        window.location.href = `mailto:${data.social.email}?subject=${subject}&body=${body}`;
+    const submitBtn = contactForm.querySelector('button[type="submit"]');
+    const originalText = submitBtn.textContent;
+    
+    submitBtn.textContent = 'Sending...';
+    submitBtn.disabled = true;
+    
+    try {
+        const formData = new FormData(contactForm);
+        const response = await fetch(contactForm.action, {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'Accept': 'application/json'
+            }
+        });
         
-        contactForm.style.display = 'none';
-        formSuccess.classList.add('show');
+        if (response.ok) {
+            contactForm.style.display = 'none';
+            formSuccess.classList.add('show');
+        } else {
+            throw new Error('Form submission failed');
+        }
+    } catch (error) {
+        submitBtn.textContent = originalText;
+        submitBtn.disabled = false;
+        alert('Something went wrong. Please try again or contact via Telegram.');
     }
 });
 

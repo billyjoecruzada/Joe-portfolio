@@ -280,23 +280,33 @@
                         <a href="https://behance.net/billyjoeCrzGraphx" target="_blank" aria-label="Behance" id="socialBehance">
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M22 7h-7V5h7v2zm1.726 10c-.442 1.297-2.029 3-5.101 3-3.074 0-5.564-1.729-5.564-5.675 0-3.91 2.325-5.92 5.466-5.92 3.082 0 4.964 1.782 5.375 4.426.078.506.109 1.188.095 2.14H15.97c.13 3.211 3.483 3.312 4.588 2.029H23.7zm-7.726-3h3.543c-.105-1.678-1.102-2.416-2.104-2.416-1.162 0-2.144.778-2.262 2.416h.823zm-3.328.001c.164-2.249-.82-3.447-2.427-3.447-1.617 0-2.478.948-2.617 3.447h5.044zm-9.672-6.001c0-1.001.808-1.142 1.544-1.086 1.005.078 1.573.676 1.573 1.816H6.999c.001-2.079 1.488-3.16 3.394-3.16 1.94 0 3.375 1.144 3.375 3.16 0 2.112-1.574 3.368-3.788 3.368h-.001c-.6 0-.544.316-.544.632v1.368h3.282v-4.073h-3.281v1.367h-.002z"/></svg>
                         </a>
-                        <a href="mailto:billyjoecruzada12@gmail.com" aria-label="Email" id="socialEmail">
+                        <a href="mailto:billyjoecruzada12@gmail.com?subject=Portfolio Inquiry" aria-label="Email" id="socialEmail">
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
                         </a>
                     </div>
+                    <div class="telegram-card">
+                        <div class="telegram-header">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
+                            </svg>
+                            <span>Direct Message</span>
+                        </div>
+                        <a href="https://t.me/joecrzd" target="_blank" class="telegram-link">@joecrzd</a>
+                        <a href="tel:+639922416595" class="telegram-phone">+63 992 241 6595</a>
+                    </div>
                 </div>
                 <div class="reveal reveal-delay-1">
-                    <form class="contact-form" id="contactForm">
+                    <form class="contact-form" id="contactForm" action="https://formspree.io/f/xeeppykr" method="POST">
                         <div class="form-group">
-                            <input type="text" id="name" placeholder=" " required>
+                            <input type="text" name="name" placeholder=" " required>
                             <label for="name">Your Name</label>
                         </div>
                         <div class="form-group">
-                            <input type="email" id="email" placeholder=" " required>
+                            <input type="email" name="email" placeholder=" " required>
                             <label for="email">Email Address</label>
                         </div>
                         <div class="form-group">
-                            <textarea id="message" rows="4" placeholder=" " required></textarea>
+                            <textarea name="message" rows="4" placeholder=" " required></textarea>
                             <label for="message">Your Message</label>
                         </div>
                         <button type="submit" class="btn btn-primary">Send Message</button>
