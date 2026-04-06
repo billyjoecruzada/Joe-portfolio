@@ -262,22 +262,26 @@ document.querySelectorAll('[data-save]').forEach(btn => {
 async function loadAdminData() {
     try {
         const [profile, social, featured, gallery, showcases, services, about, experience] = await Promise.all([
-            supabase.from('profile').select('*').eq('id', 'default').single(),
-            supabase.from('social').select('*').eq('id', 'default').single(),
+            supabase.from('profile').select('*').eq('id', 'default').maybeSingle(),
+            supabase.from('social').select('*').eq('id', 'default').maybeSingle(),
             supabase.from('featured').select('*'),
             supabase.from('gallery').select('*'),
             supabase.from('showcases').select('*').order('created_at', { ascending: true }),
             supabase.from('services').select('*'),
-            supabase.from('about').select('*').eq('id', 'default').single(),
+            supabase.from('about').select('*').eq('id', 'default').maybeSingle(),
             supabase.from('experience').select('*')
         ]);
 
         const profileData = profile.data || getDefaultProfile();
         const socialData = social.data || getDefaultSocial();
-        const featuredData = featured.data?.map((item, i) => ({ ...item, id: item.id || i + 1 })) || getDefaultFeatured();
-        const galleryData = gallery.data?.map((item, i) => ({ ...item, id: item.id || i + 1 })) || getDefaultGallery();
-        const showcasesData = showcases.data || getDefaultShowcases();
-        const servicesData = services.data || getDefaultServices();
+        const featuredData = (featured.data && featured.data.length > 0) 
+            ? featured.data.map((item, i) => ({ ...item, id: item.id || i + 1 })) 
+            : getDefaultFeatured();
+        const galleryData = (gallery.data && gallery.data.length > 0) 
+            ? gallery.data.map((item, i) => ({ ...item, id: item.id || i + 1 })) 
+            : getDefaultGallery();
+        const showcasesData = (showcases.data && showcases.data.length > 0) ? showcases.data : getDefaultShowcases();
+        const servicesData = (services.data && services.data.length > 0) ? services.data : getDefaultServices();
         const aboutData = about.data || getDefaultAbout();
         const experienceData = experience.data || [];
 

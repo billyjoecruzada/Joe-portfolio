@@ -131,31 +131,36 @@ let data = {};
 // Load data from Supabase
 async function loadData() {
     try {
+        // Check if Supabase is available
+        const { error: testError } = await supabase.from('profile').select('id').limit(1);
+        if (testError) throw testError;
+
         const [profile, social, featured, gallery, showcases, services, about] = await Promise.all([
-            supabase.from('profile').select('*').eq('id', 'default').single(),
-            supabase.from('social').select('*').eq('id', 'default').single(),
+            supabase.from('profile').select('*').eq('id', 'default').maybeSingle(),
+            supabase.from('social').select('*').eq('id', 'default').maybeSingle(),
             supabase.from('featured').select('*'),
             supabase.from('gallery').select('*'),
             supabase.from('showcases').select('*').order('created_at', { ascending: true }),
             supabase.from('services').select('*'),
-            supabase.from('about').select('*').eq('id', 'default').single()
+            supabase.from('about').select('*').eq('id', 'default').maybeSingle()
         ]);
 
         data = {
             profile: profile.data || defaultData.profile,
             social: social.data || defaultData.social,
-            featured: featured.data?.map((item, i) => ({ ...item, id: item.id || i + 1 })) || defaultData.featured,
-            gallery: gallery.data?.map((item, i) => ({ ...item, id: item.id || i + 1 })) || defaultData.gallery,
-            showcases: showcases.data || defaultData.showcases,
-            services: services.data || defaultData.services,
+            featured: (featured.data && featured.data.length > 0) 
+                ? featured.data.map((item, i) => ({ ...item, id: item.id || i + 1 })) 
+                : defaultData.featured,
+            gallery: (gallery.data && gallery.data.length > 0) 
+                ? gallery.data.map((item, i) => ({ ...item, id: item.id || i + 1 })) 
+                : defaultData.gallery,
+            showcases: (showcases.data && showcases.data.length > 0) ? showcases.data : defaultData.showcases,
+            services: (services.data && services.data.length > 0) ? services.data : defaultData.services,
             about: about.data || defaultData.about
         };
 
-        // Seed initial data if tables are empty
-        await seedInitialData();
-
     } catch (error) {
-        console.error('Error loading data from Supabase:', error);
+        console.error('Error loading from Supabase, using localStorage:', error);
         // Fallback to localStorage
         const savedProfile = localStorage.getItem('portfolio_profile');
         const savedSocial = localStorage.getItem('portfolio_social');
@@ -176,72 +181,6 @@ async function loadData() {
         };
     }
     return data;
-}
-
-// Seed initial data to Supabase if tables are empty
-async function seedInitialData() {
-    try {
-        // Check if profile exists
-        const { data: existingProfile } = await supabase.from('profile').select('id').eq('id', 'default').single();
-        if (!existingProfile) {
-            await supabase.from('profile').insert([{ id: 'default', ...defaultData.profile }]);
-        }
-
-        // Check if social exists
-        const { data: existingSocial } = await supabase.from('social').select('id').eq('id', 'default').single();
-        if (!existingSocial) {
-            await supabase.from('social').insert([{ id: 'default', ...defaultData.social }]);
-        }
-
-        // Check if about exists
-        const { data: existingAbout } = await supabase.from('about').select('id').eq('id', 'default').single();
-        if (!existingAbout) {
-            await supabase.from('about').insert([{ id: 'default', ...defaultData.about }]);
-        }
-
-        // Seed showcases if empty
-        const { data: existingShowcases } = await supabase.from('showcases').select('id');
-        if (!existingShowcases || existingShowcases.length === 0) {
-            for (const showcase of defaultData.showcases) {
-                const { ...showcaseData } = showcase;
-                delete showcaseData.id;
-                await supabase.from('showcases').insert([showcaseData]);
-            }
-        }
-
-        // Seed gallery if empty
-        const { data: existingGallery } = await supabase.from('gallery').select('id');
-        if (!existingGallery || existingGallery.length === 0) {
-            for (const item of defaultData.gallery) {
-                const { ...galleryItem } = item;
-                delete galleryItem.id;
-                await supabase.from('gallery').insert([galleryItem]);
-            }
-        }
-
-        // Seed services if empty
-        const { data: existingServices } = await supabase.from('services').select('id');
-        if (!existingServices || existingServices.length === 0) {
-            for (const service of defaultData.services) {
-                await supabase.from('services').insert([service]);
-            }
-        }
-
-        // Seed featured if empty
-        const { data: existingFeatured } = await supabase.from('featured').select('id');
-        if (!existingFeatured || existingFeatured.length === 0) {
-            for (const item of defaultData.featured) {
-                const { ...featuredItem } = item;
-                delete featuredItem.id;
-                await supabase.from('featured').insert([featuredItem]);
-            }
-        }
-
-        // Reload data after seeding
-        return await loadData();
-    } catch (error) {
-        console.error('Error seeding initial data:', error);
-    }
 }
 
 // Subscribe to real-time changes
@@ -676,12 +615,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     subscribeToChanges();
     
     // Then render everything
-    renderProfile();
-    renderSocial();
-    renderFeatured();
-    renderShowcases();
-    renderGallery();
-    renderServices();
+    if (data.profile) renderProfile();
+    if (data.social) renderSocial();
+    if (data.featured) renderFeatured();
+    if (data.showcases) renderShowcases();
+    if (data.gallery) renderGallery();
+    if (data.services) renderServices();
     initTextToggles();
 
     handleScroll();
