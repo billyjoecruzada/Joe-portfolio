@@ -1,10 +1,5 @@
 // Billy Joe Cruzada Portfolio - Main JavaScript
 
-// Supabase Configuration
-const supabaseUrl = 'https://qmizocqhzywbwdvhwske.supabase.co';
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFtaXpvY3Foenl3Yndkdmh3c2tlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU0MjkxNDMsImV4cCI6MjA5MTAwNTE0M30.EEFvqMfYhDJrbO05aaoN8e2GzAUpx3bovrmfAY3utVQ';
-const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
-
 // Default Data
 const defaultData = {
     profile: {
@@ -125,84 +120,27 @@ const defaultData = {
 };
 
 // Load data from localStorage or use defaults
-// Global data object
-let data = {};
+function loadData() {
+    const savedProfile = localStorage.getItem('portfolio_profile');
+    const savedSocial = localStorage.getItem('portfolio_social');
+    const savedFeatured = localStorage.getItem('portfolio_featured');
+    const savedGallery = localStorage.getItem('portfolio_gallery');
+    const savedShowcases = localStorage.getItem('portfolio_showcases');
+    const savedServices = localStorage.getItem('portfolio_services');
+    const savedAbout = localStorage.getItem('portfolio_about');
 
-// Load data from Supabase
-async function loadData() {
-    try {
-        // Check if Supabase is available
-        const { error: testError } = await supabase.from('profile').select('id').limit(1);
-        if (testError) throw testError;
-
-        const [profile, social, featured, gallery, showcases, services, about] = await Promise.all([
-            supabase.from('profile').select('*').eq('id', 'default').maybeSingle(),
-            supabase.from('social').select('*').eq('id', 'default').maybeSingle(),
-            supabase.from('featured').select('*'),
-            supabase.from('gallery').select('*'),
-            supabase.from('showcases').select('*').order('created_at', { ascending: true }),
-            supabase.from('services').select('*'),
-            supabase.from('about').select('*').eq('id', 'default').maybeSingle()
-        ]);
-
-        data = {
-            profile: profile.data || defaultData.profile,
-            social: social.data || defaultData.social,
-            featured: (featured.data && featured.data.length > 0) 
-                ? featured.data.map((item, i) => ({ ...item, id: item.id || i + 1 })) 
-                : defaultData.featured,
-            gallery: (gallery.data && gallery.data.length > 0) 
-                ? gallery.data.map((item, i) => ({ ...item, id: item.id || i + 1 })) 
-                : defaultData.gallery,
-            showcases: (showcases.data && showcases.data.length > 0) ? showcases.data : defaultData.showcases,
-            services: (services.data && services.data.length > 0) ? services.data : defaultData.services,
-            about: about.data || defaultData.about
-        };
-
-    } catch (error) {
-        console.error('Error loading from Supabase, using localStorage:', error);
-        // Fallback to localStorage
-        const savedProfile = localStorage.getItem('portfolio_profile');
-        const savedSocial = localStorage.getItem('portfolio_social');
-        const savedFeatured = localStorage.getItem('portfolio_featured');
-        const savedGallery = localStorage.getItem('portfolio_gallery');
-        const savedShowcases = localStorage.getItem('portfolio_showcases');
-        const savedServices = localStorage.getItem('portfolio_services');
-        const savedAbout = localStorage.getItem('portfolio_about');
-
-        data = {
-            profile: savedProfile ? JSON.parse(savedProfile) : defaultData.profile,
-            social: savedSocial ? JSON.parse(savedSocial) : defaultData.social,
-            featured: savedFeatured ? JSON.parse(savedFeatured) : defaultData.featured,
-            gallery: savedGallery ? JSON.parse(savedGallery) : defaultData.gallery,
-            showcases: savedShowcases ? JSON.parse(savedShowcases) : defaultData.showcases,
-            services: savedServices ? JSON.parse(savedServices) : defaultData.services,
-            about: savedAbout ? JSON.parse(savedAbout) : defaultData.about
-        };
-    }
-    return data;
+    return {
+        profile: savedProfile ? JSON.parse(savedProfile) : defaultData.profile,
+        social: savedSocial ? JSON.parse(savedSocial) : defaultData.social,
+        featured: savedFeatured ? JSON.parse(savedFeatured) : defaultData.featured,
+        gallery: savedGallery ? JSON.parse(savedGallery) : defaultData.gallery,
+        showcases: savedShowcases ? JSON.parse(savedShowcases) : defaultData.showcases,
+        services: savedServices ? JSON.parse(savedServices) : defaultData.services,
+        about: savedAbout ? JSON.parse(savedAbout) : defaultData.about
+    };
 }
 
-// Subscribe to real-time changes
-function subscribeToChanges() {
-    const channel = supabase
-        .channel('portfolio-changes')
-        .on('postgres_changes', { event: '*', schema: 'public', table: 'showcases' }, 
-            () => { loadData().then(() => { renderShowcases(); renderFeatured(); }); })
-        .on('postgres_changes', { event: '*', schema: 'public', table: 'gallery' }, 
-            () => { loadData().then(() => renderGallery()); })
-        .on('postgres_changes', { event: '*', schema: 'public', table: 'profile' }, 
-            () => { loadData().then(() => renderProfile()); })
-        .on('postgres_changes', { event: '*', schema: 'public', table: 'social' }, 
-            () => { loadData().then(() => renderSocial()); })
-        .on('postgres_changes', { event: '*', schema: 'public', table: 'services' }, 
-            () => { loadData().then(() => renderServices()); })
-        .on('postgres_changes', { event: '*', schema: 'public', table: 'about' }, 
-            () => { loadData().then(() => renderProfile()); })
-        .on('postgres_changes', { event: '*', schema: 'public', table: 'featured' }, 
-            () => { loadData().then(() => renderFeatured()); })
-        .subscribe();
-}
+const data = loadData();
 
 // DOM Elements
 const heroProfileImage = document.getElementById('heroProfileImage');
@@ -607,20 +545,13 @@ const observer = new IntersectionObserver((entries) => {
 }, observerOptions);
 
 // Initialize
-document.addEventListener('DOMContentLoaded', async () => {
-    // Load data from Supabase first
-    await loadData();
-    
-    // Subscribe to real-time changes
-    subscribeToChanges();
-    
-    // Then render everything
-    if (data.profile) renderProfile();
-    if (data.social) renderSocial();
-    if (data.featured) renderFeatured();
-    if (data.showcases) renderShowcases();
-    if (data.gallery) renderGallery();
-    if (data.services) renderServices();
+document.addEventListener('DOMContentLoaded', () => {
+    renderProfile();
+    renderSocial();
+    renderFeatured();
+    renderShowcases();
+    renderGallery();
+    renderServices();
     initTextToggles();
 
     handleScroll();
