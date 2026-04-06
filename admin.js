@@ -6,6 +6,11 @@ const MAX_IMAGE_SIZE = 8 * 1024 * 1024; // 8MB
 const MAX_RESIZE_WIDTH = 2000;
 const JPEG_QUALITY = 0.85;
 
+// Supabase Configuration
+const supabaseUrl = 'https://qmizocqhzywbwdvhwske.supabase.co';
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFtaXpvY3Foenl3Yndkdmh3c2tlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU0MjkxNDMsImV4cCI6MjA5MTAwNTE0M30.EEFvqMfYhDJrbO05aaoN8e2GzAUpx3bovrmfAY3utVQ';
+const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+
 // DOM Elements
 const loginPage = document.getElementById('loginPage');
 const adminDashboard = document.getElementById('adminDashboard');
@@ -184,14 +189,15 @@ document.querySelectorAll('[data-save]').forEach(btn => {
                 if (currentProfile.title !== newTitle) changes.push(`Title changed`);
                 if (currentProfile.bio !== newBio) changes.push(`Bio updated`);
                 if (document.getElementById('profilePreview').src.includes('base64')) changes.push(`Profile image updated`);
-                saveFunction = () => {
+                saveFunction = async () => {
                     const profile = {
+                        id: 'default',
                         name: newName,
                         title: newTitle,
                         bio: newBio,
                         image: document.getElementById('profilePreview').src || 'Billy ID.jpg'
                     };
-                    localStorage.setItem('portfolio_profile', JSON.stringify(profile));
+                    await supabase.from('profile').upsert([profile]);
                     showToast('Profile saved successfully!');
                 };
                 break;
@@ -204,9 +210,9 @@ document.querySelectorAll('[data-save]').forEach(btn => {
                 changes.push(`LinkedIn: ${linkedin}`);
                 changes.push(`Behance: ${behance}`);
                 changes.push(`Email: ${email}`);
-                saveFunction = () => {
-                    const social = { instagram, linkedin, behance, email };
-                    localStorage.setItem('portfolio_social', JSON.stringify(social));
+                saveFunction = async () => {
+                    const social = { id: 'default', instagram, linkedin, behance, email };
+                    await supabase.from('social').upsert([social]);
                     showToast('Social links saved!');
                 };
                 break;
@@ -218,8 +224,12 @@ document.querySelectorAll('[data-save]').forEach(btn => {
                     services.push({ title: title.value, description: descs[i].value });
                 });
                 changes.push(`${services.length} services configured`);
-                saveFunction = () => {
-                    localStorage.setItem('portfolio_services', JSON.stringify(services));
+                saveFunction = async () => {
+                    // Delete existing services and insert new ones
+                    await supabase.from('services').delete().neq('id', '00000000-0000-0000-0000-000000000000');
+                    for (const service of services) {
+                        await supabase.from('services').insert([service]);
+                    }
                     showToast('Services saved!');
                 };
                 break;
@@ -232,9 +242,9 @@ document.querySelectorAll('[data-save]').forEach(btn => {
                 changes.push(`Bio updated`);
                 changes.push(`Location: ${location}`);
                 changes.push(`Bio visibility: ${bioVisible ? 'Shown' : 'Hidden'}`);
-                saveFunction = () => {
-                    const about = { quote, bio, location, bioVisible };
-                    localStorage.setItem('portfolio_about', JSON.stringify(about));
+                saveFunction = async () => {
+                    const about = { id: 'default', quote, bio, location, bioVisible };
+                    await supabase.from('about').upsert([about]);
                     showToast('About section saved!');
                 };
                 break;
@@ -248,17 +258,92 @@ document.querySelectorAll('[data-save]').forEach(btn => {
     });
 });
 
-// Load Data from localStorage
-function loadAdminData() {
-    const profile = JSON.parse(localStorage.getItem('portfolio_profile') || 'null') || getDefaultProfile();
-    const social = JSON.parse(localStorage.getItem('portfolio_social') || 'null') || getDefaultSocial();
-    const featured = JSON.parse(localStorage.getItem('portfolio_featured') || 'null') || getDefaultFeatured();
-    const gallery = JSON.parse(localStorage.getItem('portfolio_gallery') || 'null') || getDefaultGallery();
-    const showcases = JSON.parse(localStorage.getItem('portfolio_showcases') || 'null') || getDefaultShowcases();
-    const services = JSON.parse(localStorage.getItem('portfolio_services') || 'null') || getDefaultServices();
-    const about = JSON.parse(localStorage.getItem('portfolio_about') || 'null') || getDefaultAbout();
-    const experience = JSON.parse(localStorage.getItem('portfolio_experience') || 'null') || [];
+// Load Data from Supabase
+async function loadAdminData() {
+    try {
+        const [profile, social, featured, gallery, showcases, services, about, experience] = await Promise.all([
+            supabase.from('profile').select('*').eq('id', 'default').single(),
+            supabase.from('social').select('*').eq('id', 'default').single(),
+            supabase.from('featured').select('*'),
+            supabase.from('gallery').select('*'),
+            supabase.from('showcases').select('*').order('created_at', { ascending: true }),
+            supabase.from('services').select('*'),
+            supabase.from('about').select('*').eq('id', 'default').single(),
+            supabase.from('experience').select('*')
+        ]);
 
+        const profileData = profile.data || getDefaultProfile();
+        const socialData = social.data || getDefaultSocial();
+        const featuredData = featured.data?.map((item, i) => ({ ...item, id: item.id || i + 1 })) || getDefaultFeatured();
+        const galleryData = gallery.data?.map((item, i) => ({ ...item, id: item.id || i + 1 })) || getDefaultGallery();
+        const showcasesData = showcases.data || getDefaultShowcases();
+        const servicesData = services.data || getDefaultServices();
+        const aboutData = about.data || getDefaultAbout();
+        const experienceData = experience.data || [];
+
+        // Populate Profile
+        document.getElementById('adminName').value = profileData.name;
+        document.getElementById('adminTitle').value = profileData.title;
+        document.getElementById('adminBio').value = profileData.bio;
+        if (profileData.image && profileData.image !== 'Billy ID.jpg') {
+            document.getElementById('profilePreview').src = profileData.image;
+            document.getElementById('profilePreview').style.display = 'block';
+        }
+
+        // Populate Social
+        document.getElementById('adminInstagram').value = socialData.instagram;
+        document.getElementById('adminLinkedin').value = socialData.linkedin;
+        document.getElementById('adminBehance').value = socialData.behance;
+        document.getElementById('adminEmail').value = socialData.email;
+
+        // Populate About
+        document.getElementById('adminAboutQuote').value = aboutData.quote || '';
+        document.getElementById('adminAboutBio').value = aboutData.bio || '';
+        document.getElementById('adminAboutLocation').value = aboutData.location || '';
+        document.getElementById('adminAboutBioVisible').checked = aboutData.bioVisible !== false;
+
+        // Render Galleries
+        renderFeaturedGallery(featuredData);
+        renderGalleryAdmin(galleryData);
+        renderShowcasesAdmin(showcasesData);
+        renderServicesAdmin(servicesData);
+        renderExperienceAdmin(experienceData);
+
+    } catch (error) {
+        console.error('Error loading from Supabase, falling back to localStorage:', error);
+        // Fallback to localStorage
+        const profile = JSON.parse(localStorage.getItem('portfolio_profile') || 'null') || getDefaultProfile();
+        const social = JSON.parse(localStorage.getItem('portfolio_social') || 'null') || getDefaultSocial();
+        const featured = JSON.parse(localStorage.getItem('portfolio_featured') || 'null') || getDefaultFeatured();
+        const gallery = JSON.parse(localStorage.getItem('portfolio_gallery') || 'null') || getDefaultGallery();
+        const showcases = JSON.parse(localStorage.getItem('portfolio_showcases') || 'null') || getDefaultShowcases();
+        const services = JSON.parse(localStorage.getItem('portfolio_services') || 'null') || getDefaultServices();
+        const about = JSON.parse(localStorage.getItem('portfolio_about') || 'null') || getDefaultAbout();
+        const experience = JSON.parse(localStorage.getItem('portfolio_experience') || 'null') || [];
+
+        document.getElementById('adminName').value = profile.name;
+        document.getElementById('adminTitle').value = profile.title;
+        document.getElementById('adminBio').value = profile.bio;
+        if (profile.image && profile.image !== 'Billy ID.jpg') {
+            document.getElementById('profilePreview').src = profile.image;
+            document.getElementById('profilePreview').style.display = 'block';
+        }
+        document.getElementById('adminInstagram').value = social.instagram;
+        document.getElementById('adminLinkedin').value = social.linkedin;
+        document.getElementById('adminBehance').value = social.behance;
+        document.getElementById('adminEmail').value = social.email;
+        document.getElementById('adminAboutQuote').value = about.quote || '';
+        document.getElementById('adminAboutBio').value = about.bio || '';
+        document.getElementById('adminAboutLocation').value = about.location || '';
+        document.getElementById('adminAboutBioVisible').checked = about.bioVisible !== false;
+
+        renderFeaturedGallery(featured);
+        renderGalleryAdmin(gallery);
+        renderShowcasesAdmin(showcases);
+        renderServicesAdmin(services);
+        renderExperienceAdmin(experience);
+    }
+}
     // Populate Profile
     document.getElementById('adminName').value = profile.name;
     document.getElementById('adminTitle').value = profile.title;
@@ -488,16 +573,35 @@ function renderGalleryAdmin(items) {
 }
 
 function deleteGalleryItem(index, type) {
-    const key = type === 'featured' ? 'portfolio_featured' : 'portfolio_gallery';
-    let items = JSON.parse(localStorage.getItem(key) || 'null') || (type === 'featured' ? getDefaultFeatured() : getDefaultGallery());
-    items.splice(index, 1);
-    localStorage.setItem(key, JSON.stringify(items));
-    if (type === 'featured') {
-        renderFeaturedGallery(items);
+    const table = type === 'featured' ? 'featured' : 'gallery';
+    let items = type === 'featured' 
+        ? (JSON.parse(localStorage.getItem('portfolio_featured') || 'null') || getDefaultFeatured())
+        : (JSON.parse(localStorage.getItem('portfolio_gallery') || 'null') || getDefaultGallery());
+    
+    const itemToDelete = items[index];
+    if (itemToDelete && itemToDelete.id) {
+        supabase.from(table).delete().eq('id', itemToDelete.id).then(() => {
+            items.splice(index, 1);
+            if (type === 'featured') {
+                localStorage.setItem('portfolio_featured', JSON.stringify(items));
+                renderFeaturedGallery(items);
+            } else {
+                localStorage.setItem('portfolio_gallery', JSON.stringify(items));
+                renderGalleryAdmin(items);
+            }
+            showToast('Image deleted');
+        });
     } else {
-        renderGalleryAdmin(items);
+        items.splice(index, 1);
+        if (type === 'featured') {
+            localStorage.setItem('portfolio_featured', JSON.stringify(items));
+            renderFeaturedGallery(items);
+        } else {
+            localStorage.setItem('portfolio_gallery', JSON.stringify(items));
+            renderGalleryAdmin(items);
+        }
+        showToast('Image deleted');
     }
-    showToast('Image deleted');
 }
 
 // Featured Image Upload
@@ -516,12 +620,14 @@ document.getElementById('featuredImageInput').addEventListener('change', async (
             const compressed = await compressImage(file);
             const dataUrl = await fileToBase64(compressed);
             const newItem = {
-                id: Date.now() + i,
                 src: dataUrl,
                 title: 'New Artwork',
                 category: 'Featured'
             };
-            featured.push(newItem);
+            const { data, error } = await supabase.from('featured').insert([newItem]);
+            if (data) {
+                featured.push({ ...newItem, id: data[0].id });
+            }
         } catch (error) {
             console.error('Error processing image:', error);
         }
@@ -550,12 +656,14 @@ document.getElementById('galleryImageInput').addEventListener('change', async (e
             const compressed = await compressImage(file);
             const dataUrl = await fileToBase64(compressed);
             const newItem = {
-                id: Date.now() + i,
                 src: dataUrl,
                 title: 'New Image',
                 category: category
             };
-            gallery.push(newItem);
+            const { data, error } = await supabase.from('gallery').insert([newItem]);
+            if (data) {
+                gallery.push({ ...newItem, id: data[0].id });
+            }
         } catch (error) {
             console.error('Error processing image:', error);
         }
@@ -603,9 +711,12 @@ function renderShowcasesAdmin(showcases) {
 
     // Visibility toggle
     container.querySelectorAll('.showcase-visibility').forEach(toggle => {
-        toggle.addEventListener('change', (e) => {
-            const index = parseInt(e.target.dataset.index);
-            showcases[index].visible = e.target.checked;
+        toggle.addEventListener('change', async (e) => {
+            const showcase = showcases[parseInt(e.target.dataset.index)];
+            if (showcase && showcase.id) {
+                await supabase.from('showcases').update({ visible: e.target.checked }).eq('id', showcase.id);
+            }
+            showcases[parseInt(e.target.dataset.index)].visible = e.target.checked;
             localStorage.setItem('portfolio_showcases', JSON.stringify(showcases));
             showToast(`Showcase ${e.target.checked ? 'visible' : 'hidden'}`);
         });
@@ -613,9 +724,12 @@ function renderShowcasesAdmin(showcases) {
 
     // Delete showcase
     container.querySelectorAll('[data-action="delete"]').forEach(btn => {
-        btn.addEventListener('click', () => {
-            const index = parseInt(btn.dataset.index);
-            showcases.splice(index, 1);
+        btn.addEventListener('click', async () => {
+            const showcase = showcases[parseInt(btn.dataset.index)];
+            if (showcase && showcase.id) {
+                await supabase.from('showcases').delete().eq('id', showcase.id);
+            }
+            showcases.splice(parseInt(btn.dataset.index), 1);
             localStorage.setItem('portfolio_showcases', JSON.stringify(showcases));
             renderShowcasesAdmin(showcases);
             showToast('Showcase deleted');
@@ -627,8 +741,11 @@ function renderShowcasesAdmin(showcases) {
         btn.addEventListener('click', (e) => {
             e.stopPropagation();
             const showcaseIndex = parseInt(btn.dataset.showcase);
-            const imgIndex = parseInt(btn.dataset.img);
-            showcases[showcaseIndex].images.splice(imgIndex, 1);
+            showcases[showcaseIndex].images.splice(parseInt(btn.dataset.img), 1);
+            const showcase = showcases[showcaseIndex];
+            if (showcase && showcase.id) {
+                supabase.from('showcases').update({ images: showcase.images }).eq('id', showcase.id);
+            }
             localStorage.setItem('portfolio_showcases', JSON.stringify(showcases));
             renderShowcasesAdmin(showcases);
             showToast('Image deleted from showcase');
@@ -666,7 +783,7 @@ document.getElementById('showcaseImageInput').addEventListener('change', async (
     e.target.value = '';
 });
 
-document.getElementById('addShowcaseBtn').addEventListener('click', () => {
+document.getElementById('addShowcaseBtn').addEventListener('click', async () => {
     const title = document.getElementById('newShowcaseTitle').value;
     const category = document.getElementById('newShowcaseCategory').value;
     const toolsRaw = document.getElementById('newShowcaseTools').value;
@@ -684,17 +801,25 @@ document.getElementById('addShowcaseBtn').addEventListener('click', () => {
         return;
     }
     
-    const showcases = JSON.parse(localStorage.getItem('portfolio_showcases') || 'null') || getDefaultShowcases();
-    showcases.push({
-        id: Date.now(),
+    const newShowcase = {
         title,
         category,
         tools,
         isNSFW,
         visible,
         images: tempShowcaseImages
-    });
+    };
     
+    // Save to Supabase
+    const { data, error } = await supabase.from('showcases').insert([newShowcase]);
+    
+    // Also update localStorage
+    const showcases = JSON.parse(localStorage.getItem('portfolio_showcases') || 'null') || getDefaultShowcases();
+    if (data && data[0]) {
+        showcases.push({ ...newShowcase, id: data[0].id });
+    } else {
+        showcases.push({ ...newShowcase, id: Date.now() });
+    }
     localStorage.setItem('portfolio_showcases', JSON.stringify(showcases));
     renderShowcasesAdmin(showcases);
     
@@ -746,9 +871,13 @@ function renderExperienceAdmin(items) {
     `).join('');
 
     container.querySelectorAll('.delete-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
+        btn.addEventListener('click', async () => {
             const index = parseInt(btn.dataset.index);
             const experience = JSON.parse(localStorage.getItem('portfolio_experience') || 'null') || [];
+            const expToDelete = experience[index];
+            if (expToDelete && expToDelete.id) {
+                await supabase.from('experience').delete().eq('id', expToDelete.id);
+            }
             experience.splice(index, 1);
             localStorage.setItem('portfolio_experience', JSON.stringify(experience));
             renderExperienceAdmin(experience);
@@ -758,7 +887,7 @@ function renderExperienceAdmin(items) {
 }
 
 // Add Experience
-document.getElementById('addExperience').addEventListener('click', () => {
+document.getElementById('addExperience').addEventListener('click', async () => {
     const company = document.getElementById('newExpCompany').value;
     const role = document.getElementById('newExpRole').value;
     const period = document.getElementById('newExpPeriod').value;
@@ -769,8 +898,18 @@ document.getElementById('addExperience').addEventListener('click', () => {
         return;
     }
 
+    const newExp = { company, role, period, description };
+    
+    // Save to Supabase
+    const { data } = await supabase.from('experience').insert([newExp]);
+    
+    // Update localStorage
     const experience = JSON.parse(localStorage.getItem('portfolio_experience') || 'null') || [];
-    experience.push({ company, role, period, description });
+    if (data && data[0]) {
+        experience.push({ ...newExp, id: data[0].id });
+    } else {
+        experience.push({ ...newExp, id: Date.now() });
+    }
     localStorage.setItem('portfolio_experience', JSON.stringify(experience));
 
     // Clear inputs

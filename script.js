@@ -1,5 +1,10 @@
 // Billy Joe Cruzada Portfolio - Main JavaScript
 
+// Supabase Configuration
+const supabaseUrl = 'https://qmizocqhzywbwdvhwske.supabase.co';
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFtaXpvY3Foenl3Yndkdmh3c2tlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU0MjkxNDMsImV4cCI6MjA5MTAwNTE0M30.EEFvqMfYhDJrbO05aaoN8e2GzAUpx3bovrmfAY3utVQ';
+const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+
 // Default Data
 const defaultData = {
     profile: {
@@ -120,27 +125,145 @@ const defaultData = {
 };
 
 // Load data from localStorage or use defaults
-function loadData() {
-    const savedProfile = localStorage.getItem('portfolio_profile');
-    const savedSocial = localStorage.getItem('portfolio_social');
-    const savedFeatured = localStorage.getItem('portfolio_featured');
-    const savedGallery = localStorage.getItem('portfolio_gallery');
-    const savedShowcases = localStorage.getItem('portfolio_showcases');
-    const savedServices = localStorage.getItem('portfolio_services');
-    const savedAbout = localStorage.getItem('portfolio_about');
+// Global data object
+let data = {};
 
-    return {
-        profile: savedProfile ? JSON.parse(savedProfile) : defaultData.profile,
-        social: savedSocial ? JSON.parse(savedSocial) : defaultData.social,
-        featured: savedFeatured ? JSON.parse(savedFeatured) : defaultData.featured,
-        gallery: savedGallery ? JSON.parse(savedGallery) : defaultData.gallery,
-        showcases: savedShowcases ? JSON.parse(savedShowcases) : defaultData.showcases,
-        services: savedServices ? JSON.parse(savedServices) : defaultData.services,
-        about: savedAbout ? JSON.parse(savedAbout) : defaultData.about
-    };
+// Load data from Supabase
+async function loadData() {
+    try {
+        const [profile, social, featured, gallery, showcases, services, about] = await Promise.all([
+            supabase.from('profile').select('*').eq('id', 'default').single(),
+            supabase.from('social').select('*').eq('id', 'default').single(),
+            supabase.from('featured').select('*'),
+            supabase.from('gallery').select('*'),
+            supabase.from('showcases').select('*').order('created_at', { ascending: true }),
+            supabase.from('services').select('*'),
+            supabase.from('about').select('*').eq('id', 'default').single()
+        ]);
+
+        data = {
+            profile: profile.data || defaultData.profile,
+            social: social.data || defaultData.social,
+            featured: featured.data?.map((item, i) => ({ ...item, id: item.id || i + 1 })) || defaultData.featured,
+            gallery: gallery.data?.map((item, i) => ({ ...item, id: item.id || i + 1 })) || defaultData.gallery,
+            showcases: showcases.data || defaultData.showcases,
+            services: services.data || defaultData.services,
+            about: about.data || defaultData.about
+        };
+
+        // Seed initial data if tables are empty
+        await seedInitialData();
+
+    } catch (error) {
+        console.error('Error loading data from Supabase:', error);
+        // Fallback to localStorage
+        const savedProfile = localStorage.getItem('portfolio_profile');
+        const savedSocial = localStorage.getItem('portfolio_social');
+        const savedFeatured = localStorage.getItem('portfolio_featured');
+        const savedGallery = localStorage.getItem('portfolio_gallery');
+        const savedShowcases = localStorage.getItem('portfolio_showcases');
+        const savedServices = localStorage.getItem('portfolio_services');
+        const savedAbout = localStorage.getItem('portfolio_about');
+
+        data = {
+            profile: savedProfile ? JSON.parse(savedProfile) : defaultData.profile,
+            social: savedSocial ? JSON.parse(savedSocial) : defaultData.social,
+            featured: savedFeatured ? JSON.parse(savedFeatured) : defaultData.featured,
+            gallery: savedGallery ? JSON.parse(savedGallery) : defaultData.gallery,
+            showcases: savedShowcases ? JSON.parse(savedShowcases) : defaultData.showcases,
+            services: savedServices ? JSON.parse(savedServices) : defaultData.services,
+            about: savedAbout ? JSON.parse(savedAbout) : defaultData.about
+        };
+    }
+    return data;
 }
 
-const data = loadData();
+// Seed initial data to Supabase if tables are empty
+async function seedInitialData() {
+    try {
+        // Check if profile exists
+        const { data: existingProfile } = await supabase.from('profile').select('id').eq('id', 'default').single();
+        if (!existingProfile) {
+            await supabase.from('profile').insert([{ id: 'default', ...defaultData.profile }]);
+        }
+
+        // Check if social exists
+        const { data: existingSocial } = await supabase.from('social').select('id').eq('id', 'default').single();
+        if (!existingSocial) {
+            await supabase.from('social').insert([{ id: 'default', ...defaultData.social }]);
+        }
+
+        // Check if about exists
+        const { data: existingAbout } = await supabase.from('about').select('id').eq('id', 'default').single();
+        if (!existingAbout) {
+            await supabase.from('about').insert([{ id: 'default', ...defaultData.about }]);
+        }
+
+        // Seed showcases if empty
+        const { data: existingShowcases } = await supabase.from('showcases').select('id');
+        if (!existingShowcases || existingShowcases.length === 0) {
+            for (const showcase of defaultData.showcases) {
+                const { ...showcaseData } = showcase;
+                delete showcaseData.id;
+                await supabase.from('showcases').insert([showcaseData]);
+            }
+        }
+
+        // Seed gallery if empty
+        const { data: existingGallery } = await supabase.from('gallery').select('id');
+        if (!existingGallery || existingGallery.length === 0) {
+            for (const item of defaultData.gallery) {
+                const { ...galleryItem } = item;
+                delete galleryItem.id;
+                await supabase.from('gallery').insert([galleryItem]);
+            }
+        }
+
+        // Seed services if empty
+        const { data: existingServices } = await supabase.from('services').select('id');
+        if (!existingServices || existingServices.length === 0) {
+            for (const service of defaultData.services) {
+                await supabase.from('services').insert([service]);
+            }
+        }
+
+        // Seed featured if empty
+        const { data: existingFeatured } = await supabase.from('featured').select('id');
+        if (!existingFeatured || existingFeatured.length === 0) {
+            for (const item of defaultData.featured) {
+                const { ...featuredItem } = item;
+                delete featuredItem.id;
+                await supabase.from('featured').insert([featuredItem]);
+            }
+        }
+
+        // Reload data after seeding
+        return await loadData();
+    } catch (error) {
+        console.error('Error seeding initial data:', error);
+    }
+}
+
+// Subscribe to real-time changes
+function subscribeToChanges() {
+    const channel = supabase
+        .channel('portfolio-changes')
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'showcases' }, 
+            () => { loadData().then(() => { renderShowcases(); renderFeatured(); }); })
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'gallery' }, 
+            () => { loadData().then(() => renderGallery()); })
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'profile' }, 
+            () => { loadData().then(() => renderProfile()); })
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'social' }, 
+            () => { loadData().then(() => renderSocial()); })
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'services' }, 
+            () => { loadData().then(() => renderServices()); })
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'about' }, 
+            () => { loadData().then(() => renderProfile()); })
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'featured' }, 
+            () => { loadData().then(() => renderFeatured()); })
+        .subscribe();
+}
 
 // DOM Elements
 const heroProfileImage = document.getElementById('heroProfileImage');
@@ -545,7 +668,14 @@ const observer = new IntersectionObserver((entries) => {
 }, observerOptions);
 
 // Initialize
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
+    // Load data from Supabase first
+    await loadData();
+    
+    // Subscribe to real-time changes
+    subscribeToChanges();
+    
+    // Then render everything
     renderProfile();
     renderSocial();
     renderFeatured();
