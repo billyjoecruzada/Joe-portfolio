@@ -100,7 +100,7 @@ img {
     z-index: 1000;
     background: var(--bg-tertiary);
     border-radius: var(--border-radius-lg);
-    padding: 8px 8px 8px 24px;
+    padding: 14px 8px 14px 24px;
     display: flex;
     align-items: center;
     gap: 8px;
@@ -129,26 +129,36 @@ img {
 .nav-links {
     display: flex;
     align-items: center;
-    gap: 32px;
+    gap: 10px;
     list-style: none;
+    white-space: nowrap;
+}
+
+.nav-links li {
+    white-space: nowrap;
 }
 
 .nav-links a {
     font-family: 'Poppins', sans-serif;
     font-weight: 600;
     font-size: 15px;
-    color: var(--text-primary);
-    transition: all var(--transition);
+    color: #FFFFFF;
+    transition: transform 0.3s ease, text-shadow 0.3s ease, color 0.3s ease;
     position: relative;
     padding: 4px 8px;
     border-radius: 4px;
+    display: inline-block;
+    text-decoration: none;
 }
 
-.nav-links a:hover,
+.nav-links a:hover {
+    transform: scale(1.15);
+    text-shadow: 0 0 20px rgba(255, 107, 0, 1), 0 0 40px rgba(255, 20, 147, 0.8);
+}
+
 .nav-links a.active {
-    color: var(--text-primary);
-    transform: scale(1.1);
-    background: rgba(255, 107, 0, 0.1);
+    transform: scale(1.15);
+    text-shadow: 0 0 20px rgba(255, 107, 0, 1), 0 0 40px rgba(255, 20, 147, 0.8);
 }
 
 .nav-links a::after {
@@ -162,9 +172,23 @@ img {
     transition: width var(--transition);
 }
 
-.nav-links a:hover::after,
 .nav-links a.active::after {
     width: 100%;
+}
+
+@media (max-width: 1100px) {
+    .nav-links a {
+        font-size: 13px;
+        padding: 4px 6px;
+    }
+    .nav-logo {
+        font-size: 18px;
+        margin-right: 10px;
+    }
+    .nav-dropdown-btn svg {
+        width: 14px;
+        height: 14px;
+    }
 }
 
 .nav-dropdown {
@@ -243,7 +267,7 @@ img {
 
 @media (max-width: 900px) {
     .floating-nav {
-        padding: 8px;
+        padding: 14px 8px;
         width: calc(100% - 48px);
         max-width: 500px;
         justify-content: space-between;
@@ -342,6 +366,31 @@ section {
     align-items: center;
     position: relative;
     padding-top: 120px;
+}
+
+.hero-video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -1;
+}
+
+.hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.80);
+    z-index: 0;
+}
+
+.hero .container {
+    position: relative;
+    z-index: 1;
 }
 
 .hero-content {
@@ -688,37 +737,107 @@ section {
     font-family: 'Poppins', sans-serif;
 }
 
-.nsfw-blur {
-    filter: blur(20px);
-    transition: filter 0.5s ease;
+/* 9. Video Edits Section */
+.video-edits {
+    background: var(--bg-secondary);
+    padding: 80px 0;
 }
 
-.nsfw-badge-overlay {
+.video-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 32px;
+    margin-top: 40px;
+}
+
+@media (max-width: 768px) {
+    .video-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.video-card {
+    position: relative;
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    cursor: pointer;
+    background: var(--bg-tertiary);
+    aspect-ratio: 16 / 9;
+}
+
+.video-card video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.video-card:hover video {
+    transform: scale(1.05);
+}
+
+.video-overlay {
     position: absolute;
-    inset: 0;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: rgba(0, 0, 0, 0.5);
-    backdrop-filter: blur(2px);
-    border-radius: var(--border-radius);
-    z-index: 5;
+    background: rgba(0, 0, 0, 0.3);
+    transition: background 0.3s ease;
 }
 
-.nsfw-badge-text {
-    background: var(--accent-red);
+.video-card:hover .video-overlay {
+    background: rgba(0, 0, 0, 0.1);
+}
+
+.play-btn {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2);
+    border: 2px solid rgba(255, 255, 255, 0.8);
     color: white;
-    padding: 8px 16px;
-    border-radius: 8px;
-    font-family: 'Poppins', sans-serif;
-    font-weight: 600;
-    font-size: 14px;
+    font-size: 24px;
     display: flex;
     align-items: center;
-    gap: 6px;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(4px);
 }
 
-/* 9. Gallery Section */
+.play-btn:hover {
+    background: var(--accent-orange);
+    border-color: var(--accent-orange);
+    transform: scale(1.1);
+}
+
+.video-info {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 16px;
+    background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+}
+
+.video-title {
+    font-family: 'Poppins', sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    margin-bottom: 4px;
+}
+
+.video-tools {
+    font-family: 'Poppins', sans-serif;
+    font-size: 12px;
+    color: var(--text-secondary);
+}
+
+/* 10. Gallery Section */
 .gallery-section {
     background: var(--bg-secondary);
 }
@@ -819,6 +938,13 @@ section {
 }
 
 .lightbox-content > img {
+    max-width: 100%;
+    max-height: 80vh;
+    object-fit: contain;
+    border-radius: var(--border-radius);
+}
+
+.lightbox-content > video {
     max-width: 100%;
     max-height: 80vh;
     object-fit: contain;
@@ -1415,138 +1541,6 @@ footer p {
     height: 16px;
 }
 
-/* ========== NSFW MODAL STYLES ========== */
-.nsfw-modal {
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.95);
-    z-index: 5000;
-    display: none;
-    align-items: center;
-    justify-content: center;
-    padding: 24px;
-}
-
-.nsfw-modal.active {
-    display: flex;
-}
-
-.nsfw-modal-content {
-    background: var(--bg-secondary);
-    border-radius: var(--border-radius);
-    padding: 40px;
-    max-width: 500px;
-    width: 100%;
-    text-align: center;
-    border: 2px solid var(--accent-red);
-    box-shadow: 0 0 40px rgba(233, 30, 99, 0.3);
-}
-
-.nsfw-icon {
-    width: 80px;
-    height: 80px;
-    margin: 0 auto 24px;
-    background: rgba(233, 30, 99, 0.2);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--accent-red);
-}
-
-.nsfw-modal-content h3 {
-    font-size: 24px;
-    color: var(--accent-red);
-    margin-bottom: 16px;
-    letter-spacing: 0.05em;
-}
-
-.nsfw-modal-content p {
-    color: var(--text-secondary);
-    font-size: 16px;
-    line-height: 1.6;
-    margin-bottom: 12px;
-}
-
-.nsfw-checkbox {
-    margin: 24px 0;
-    padding: 16px;
-    background: var(--bg-tertiary);
-    border-radius: 8px;
-}
-
-.nsfw-checkbox input[type="checkbox"] {
-    width: 20px;
-    height: 20px;
-    margin-right: 12px;
-    accent-color: var(--accent-orange);
-    cursor: pointer;
-}
-
-.nsfw-checkbox label {
-    color: var(--text-primary);
-    font-size: 14px;
-    cursor: pointer;
-    display: inline-flex;
-    align-items: center;
-}
-
-.nsfw-buttons {
-    display: flex;
-    gap: 16px;
-    justify-content: center;
-    margin-top: 24px;
-}
-
-.btn-nsfw-proceed {
-    background: #4CAF50;
-    color: white;
-    padding: 14px 32px;
-    font-family: 'Poppins', sans-serif;
-    font-size: 14px;
-    font-weight: 600;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all var(--transition);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-}
-
-.btn-nsfw-proceed:disabled {
-    background: var(--bg-tertiary);
-    color: var(--text-secondary);
-    cursor: not-allowed;
-    opacity: 0.6;
-}
-
-.btn-nsfw-proceed:not(:disabled):hover {
-    background: #66BB6A;
-    transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(76, 175, 80, 0.3);
-}
-
-.btn-nsfw-back {
-    background: var(--accent-red);
-    color: white;
-    padding: 14px 32px;
-    font-family: 'Poppins', sans-serif;
-    font-size: 14px;
-    font-weight: 600;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all var(--transition);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-}
-
-.btn-nsfw-back:hover {
-    background: #f44336;
-    transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(244, 67, 54, 0.3);
-}
-
 /* ========== TOOL SVG & BADGE STYLES ========== */
 .tool-svg {
     width: 48px;
@@ -2059,4 +2053,57 @@ footer p {
 
 ::-webkit-scrollbar-thumb:hover {
     background: var(--accent-orange);
+}
+
+/* 17. AI Videos Section */
+.ai-videos {
+    background: var(--bg-primary);
+    padding: 80px 0;
+}
+
+.ai-video-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin-top: 40px;
+}
+
+.ai-video-card {
+    position: relative;
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    cursor: pointer;
+    background: var(--bg-tertiary);
+}
+
+.ai-video-card video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.ai-video-card:hover video {
+    transform: scale(1.05);
+}
+
+.ai-video-card.horizontal {
+    grid-column: 1 / -1;
+    aspect-ratio: 16 / 9;
+}
+
+.ai-video-card.vertical {
+    aspect-ratio: 9 / 16;
+}
+
+@media (max-width: 768px) {
+    .ai-video-grid {
+        grid-template-columns: 1fr;
+    }
+    .ai-video-card.horizontal {
+        grid-column: 1;
+    }
+    .ai-video-card.vertical {
+        max-height: 70vh;
+    }
 }

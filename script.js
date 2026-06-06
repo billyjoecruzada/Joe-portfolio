@@ -4,7 +4,7 @@
 const defaultData = {
     profile: {
         name: "Billy Joe Cruzada",
-        title: "Graphic Designer | Photographer | Photo Editor | Generative AI Specialist",
+        title: "Graphic Designer | Video Editor | Photographer | Photo Editor | Generative AI Specialist",
         bio: "Creative professional with 5+ years of experience specializing in brand identity, digital design, and creative direction. Passionate about transforming ideas into compelling visual stories.",
         image: "Billy ID.jpg"
     },
@@ -15,43 +15,53 @@ const defaultData = {
         email: "billyjoecruzada12@gmail.com"
     },
     featured: [
-        { id: 1, src: "Elements/Designs/Food Product Design/(1) Primary Logo.jpg", title: "Kamote Chips", category: "Food Product Design" },
-        { id: 2, src: "Elements/Designs/Food Product Design/(3) Best-seller-A.jpg", title: "Kamote Chips Ad", category: "Food Product Design" },
+        { id: 1, src: "Elements/Designs/Food Product Design/(1) Primary Logo.jpg", title: "Kamote Crisps", category: "Food Product Design" },
+        { id: 2, src: "Elements/Designs/Food Product Design/(3) Best-seller.jpg", title: "Kamote Crisps Ad", category: "Food Product Design" },
         { id: 3, src: "Elements/Designs/Health and Wellness/(5) Passiflora front cover.jpg", title: "Passiflora", category: "Health & Wellness" },
         { id: 4, src: "Elements/Designs/Health and Wellness/(7) Pefume Mockup -- Passiflora 001 Burning desire 1x1.jpg", title: "Passiflora Mockup", category: "Health & Wellness" },
         { id: 5, src: "Elements/Designs/Print Designs/Nmax ii color 1 variation.png", title: "Nmax Design", category: "Print" },
-        { id: 6, src: "Elements/Designs/Print Designs/Shirt mockup.jpg", title: "Shirt Design", category: "Print" }
+        { id: 6, src: "Elements/Designs/Shopify - Berrimora/Logo.png", title: "Berrimora Shopify", category: "Shopify" }
     ],
     gallery: [
-        { id: 1, src: "Elements/Photography/Julia 1st Process.jpg", title: "Portrait", category: "portrait" },
-        { id: 2, src: "Elements/Photography/Julia 1st Process-5.jpg", title: "Portrait", category: "portrait" },
-        { id: 3, src: "Elements/Photography/Julia 1st Process-7.jpg", title: "Portrait", category: "portrait" },
-        { id: 4, src: "Elements/Photography/Julia 1st Process-11.jpg", title: "Portrait", category: "portrait" },
-        { id: 5, src: "Elements/Photography/1x1 format IG 2.jpg", title: "Portrait", category: "portrait" },
-        { id: 6, src: "Elements/Photography/1x1 format IG 4.jpg", title: "Portrait", category: "portrait" },
-        { id: 7, src: "Elements/Photography/1x1 format IG 7.jpg", title: "Portrait", category: "portrait" },
-        { id: 8, src: "Elements/Photography/1x1 format IG 9x.jpg", title: "Portrait", category: "portrait" },
-        { id: 9, src: "Elements/Photography/1x1 format IG 11.jpg", title: "Portrait", category: "portrait" },
-        { id: 10, src: "Elements/Photography/1x1 format IG 15.jpg", title: "Portrait", category: "portrait" },
-        { id: 11, src: "Elements/Photography/Food Samgy1-01.jpg", title: "Food Photography", category: "food" },
-        { id: 12, src: "Elements/Photography/Food Samgy1-02.jpg", title: "Food Photography", category: "food" },
-        { id: 13, src: "Elements/Photography/KRV DSCF6221-Enhanced-NR.jpg", title: "Portrait", category: "portrait" },
-        { id: 14, src: "Elements/Photography/DSCF6543.jpg", title: "Portrait", category: "portrait" },
-        { id: 15, src: "Elements/Photography/DSCF6602.jpg", title: "Portrait", category: "portrait" }
+        { id: 1, src: "Elements/Photography/1x1 format IG 2.jpg", title: "Portrait", category: "portrait" },
+        { id: 2, src: "Elements/Photography/1x1 format IG 4.jpg", title: "Portrait", category: "portrait" },
+        { id: 3, src: "Elements/Photography/1x1 format IG 7.jpg", title: "Portrait", category: "portrait" },
+        { id: 4, src: "Elements/Photography/1x1 format IG 11.jpg", title: "Portrait", category: "portrait" },
+        { id: 5, src: "Elements/Photography/1x1 format IG 9x.jpg", title: "Portrait", category: "portrait" },
+        { id: 6, src: "Elements/Photography/1x1 format IG 15.jpg", title: "Portrait", category: "portrait" },
+        { id: 7, src: "Elements/Photography/2x3 format IG White BG - 3.jpg", title: "Portrait", category: "portrait" },
+        { id: 8, src: "Elements/Photography/2x3 format IG White BG - 4.jpg", title: "Portrait", category: "portrait" },
+        { id: 9, src: "Elements/Photography/2x3 format IG White BG - 6.jpg", title: "Portrait", category: "portrait" },
+        { id: 10, src: "Elements/Photography/baag --6.jpg", title: "Portrait", category: "portrait" },
+        { id: 11, src: "Elements/Photography/DSCF6543.jpg", title: "Portrait", category: "portrait" },
+        { id: 12, src: "Elements/Photography/DSCF6602.jpg", title: "Portrait", category: "portrait" },
+        { id: 13, src: "Elements/Photography/Food Samgy1-01.jpg", title: "Food Photography", category: "food" },
+        { id: 14, src: "Elements/Photography/Food Samgy1-02.jpg", title: "Food Photography", category: "food" },
+        { id: 15, src: "Elements/Photography/Grad 2024.jpg", title: "Portrait", category: "portrait" },
+        { id: 16, src: "Elements/Photography/Img-1.JPG", title: "Portrait", category: "portrait" },
+        { id: 17, src: "Elements/Photography/Img-2.JPG", title: "Portrait", category: "portrait" },
+        { id: 18, src: "Elements/Photography/Img-3.JPG", title: "Portrait", category: "portrait" },
+        { id: 19, src: "Elements/Photography/Imga-2.JPG", title: "Portrait", category: "portrait" },
+        { id: 20, src: "Elements/Photography/Imga-3.JPG", title: "Portrait", category: "portrait" },
+        { id: 21, src: "Elements/Photography/Julia 1st Process.jpg", title: "Portrait", category: "portrait" },
+        { id: 22, src: "Elements/Photography/Julia 1st Process-5.jpg", title: "Portrait", category: "portrait" },
+        { id: 23, src: "Elements/Photography/Julia 1st Process-7.jpg", title: "Portrait", category: "portrait" },
+        { id: 24, src: "Elements/Photography/Julia 1st Process-11.jpg", title: "Portrait", category: "portrait" },
+        { id: 25, src: "Elements/Photography/KRV DSCF6221-Enhanced-NR.jpg", title: "Portrait", category: "portrait" }
     ],
     showcases: [
         {
             id: 1,
-            title: "Kamote Chips Branding",
+            title: "Kamote Crisps Branding",
             category: "Food Product Design",
-            tools: ["Ai", "Ps"],
-            isNSFW: false,
+            tools: ["Ai", "Ps", "Ae"],
             visible: true,
             images: [
                 "Elements/Designs/Food Product Design/(1) Primary Logo.jpg",
                 "Elements/Designs/Food Product Design/(2) Front - Kamote behanc.jpg",
-                "Elements/Designs/Food Product Design/(3) Best-seller-A.jpg",
-                "Elements/Designs/Food Product Design/(4) Kamote-Chips-ad-001.jpg"
+                "Elements/Designs/Food Product Design/(3) Best-seller.jpg",
+                "Elements/Designs/Food Product Design/(4) Kamote-Chips-ad-001.jpg",
+                "Elements/Designs/Food Product Design/(5) Kamote chips ads sample.mov"
             ]
         },
         {
@@ -59,7 +69,6 @@ const defaultData = {
             title: "Passiflora Perfume",
             category: "Health & Wellness",
             tools: ["Ai", "Ps"],
-            isNSFW: false,
             visible: true,
             images: [
                 "Elements/Designs/Health and Wellness/(1) Artboard 19@2x.png",
@@ -76,7 +85,6 @@ const defaultData = {
             title: "Print Designs",
             category: "Print",
             tools: ["Ai", "Ps"],
-            isNSFW: false,
             visible: true,
             images: [
                 "Elements/Designs/Print Designs/Nmax ii color 1 variation.png",
@@ -87,22 +95,69 @@ const defaultData = {
         },
         {
             id: 4,
-            title: "OFM AI Contents",
-            category: "Generative AI",
-            tools: ["Seedream", "Nano Banana", "Higgsfield"],
-            isNSFW: true,
+            title: "Berrimora Shopify Store",
+            category: "Shopify",
+            tools: ["Ps", "Figma"],
             visible: true,
             images: [
-                "Elements/🌶OFM - Generative AI (Explicit)/Asian Girl/hf_20260227_084939_cf4c5dc9-24c7-470b-bfab-736df78742e6.jpeg",
-                "Elements/🌶OFM - Generative AI (Explicit)/Asian Girl/hf_20260227_083132_b09553e3-9ae8-4592-8401-ffa7329ea321.jpeg",
-                "Elements/🌶OFM - Generative AI (Explicit)/Asian Girl/hf_20260227_083132_c19d0c36-b3f6-4489-ad7d-5efd5e75bff3.jpeg",
-                "Elements/🌶OFM - Generative AI (Explicit)/Latina Girl/seedream-i2i-1773811404667-0.png",
-                "Elements/🌶OFM - Generative AI (Explicit)/Latina Girl/seedream-i2i-1773811544408-0.png",
-                "Elements/🌶OFM - Generative AI (Explicit)/Latina Girl/seedream-i2i-1773811404306-1.png",
-                "Elements/🌶OFM - Generative AI (Explicit)/White Girl/seedream-i2i-1772188655245-1.png",
-                "Elements/🌶OFM - Generative AI (Explicit)/White Girl/seedream-i2i-1772189062112-0.png",
-                "Elements/🌶OFM - Generative AI (Explicit)/White Girl/seedream-i2i-1772191279662-1.png"
+                "Elements/Designs/Shopify - Berrimora/Logo.png",
+                "Elements/Designs/Shopify - Berrimora/Berrimora snaps 01.PNG",
+                "Elements/Designs/Shopify - Berrimora/Berrimora snaps 02.PNG",
+                "Elements/Designs/Shopify - Berrimora/Berrimora snaps 03.PNG",
+                "Elements/Designs/Shopify - Berrimora/Backdrop.jpg",
+                "Elements/Designs/Shopify - Berrimora/Mobile View.jpg"
             ]
+        }
+    ],
+    aiVideos: [
+        {
+            id: 1,
+            src: "Elements/AI videos - Higgsfield/AI-Seedance footage.mp4",
+            title: "AI Seedance Motion",
+            tool: "Seedance",
+            ratio: "horizontal"
+        },
+        {
+            id: 2,
+            src: "Elements/AI videos - Higgsfield/hf_20260605_114930_7583322b-8f04-4e59-b108-d6bebaf1419a.mp4",
+            title: "Higgsfield AI 001",
+            tool: "Higgsfield",
+            ratio: "vertical"
+        },
+        {
+            id: 3,
+            src: "Elements/AI videos - Higgsfield/hf_20260605_120624_5e56f7f8-97dd-4f25-957e-01bd78da919d.mp4",
+            title: "Higgsfield AI 002",
+            tool: "Higgsfield",
+            ratio: "vertical"
+        },
+        {
+            id: 4,
+            src: "Elements/AI videos - Higgsfield/hf_20260606_104322_abf631e7-9aac-493b-9d22-920cb3913057.mp4",
+            title: "Higgsfield AI 003",
+            tool: "Higgsfield",
+            ratio: "vertical"
+        },
+        {
+            id: 5,
+            src: "Elements/AI videos - Higgsfield/YTS_001.mp4",
+            title: "YTS 001",
+            tool: "Higgsfield",
+            ratio: "vertical"
+        },
+        {
+            id: 6,
+            src: "Elements/AI videos - Higgsfield/YTS-002.mp4",
+            title: "YTS 002",
+            tool: "Higgsfield",
+            ratio: "vertical"
+        },
+        {
+            id: 7,
+            src: "Elements/AI videos - Higgsfield/YTS-007.mp4",
+            title: "YTS 007",
+            tool: "Higgsfield",
+            ratio: "vertical"
         }
     ],
     services: [
@@ -123,24 +178,30 @@ const defaultData = {
 function loadData() {
     const savedProfile = localStorage.getItem('portfolio_profile');
     const savedSocial = localStorage.getItem('portfolio_social');
-    const savedFeatured = localStorage.getItem('portfolio_featured');
-    const savedGallery = localStorage.getItem('portfolio_gallery');
-    const savedShowcases = localStorage.getItem('portfolio_showcases');
     const savedServices = localStorage.getItem('portfolio_services');
+    const savedAIVideos = localStorage.getItem('portfolio_aiVideos');
     const savedAbout = localStorage.getItem('portfolio_about');
 
+    // featured, gallery, and showcases use only defaults to avoid localStorage corruption
     return {
         profile: savedProfile ? JSON.parse(savedProfile) : defaultData.profile,
         social: savedSocial ? JSON.parse(savedSocial) : defaultData.social,
-        featured: savedFeatured ? JSON.parse(savedFeatured) : defaultData.featured,
-        gallery: savedGallery ? JSON.parse(savedGallery) : defaultData.gallery,
-        showcases: savedShowcases ? JSON.parse(savedShowcases) : defaultData.showcases,
+        featured: defaultData.featured,
+        gallery: defaultData.gallery,
+        showcases: defaultData.showcases,
         services: savedServices ? JSON.parse(savedServices) : defaultData.services,
+        aiVideos: savedAIVideos ? JSON.parse(savedAIVideos) : defaultData.aiVideos,
         about: savedAbout ? JSON.parse(savedAbout) : defaultData.about
     };
 }
 
 const data = loadData();
+
+function getRandomGallery(pool) {
+    return [...pool].sort(() => Math.random() - 0.5);
+}
+
+let currentGallery = [];
 
 // DOM Elements
 const heroProfileImage = document.getElementById('heroProfileImage');
@@ -155,6 +216,7 @@ const servicesGrid = document.getElementById('servicesGrid');
 const showcasesGrid = document.getElementById('showcasesGrid');
 const lightbox = document.getElementById('lightbox');
 const lightboxImage = document.getElementById('lightboxImage');
+const lightboxVideo = document.getElementById('lightboxVideo');
 const lightboxTitle = document.getElementById('lightboxTitle');
 const lightboxCounter = document.getElementById('lightboxCounter');
 const lightboxTools = document.getElementById('lightboxTools');
@@ -164,50 +226,6 @@ const nav = document.querySelector('.floating-nav');
 const navLinks = document.querySelector('.nav-links');
 const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
 const sections = document.querySelectorAll('section');
-
-// NSFW Modal
-const nsfwModal = document.getElementById('nsfwModal');
-const nsfwConfirm = document.getElementById('nsfwConfirm');
-const nsfwProceed = document.getElementById('nsfwProceed');
-const nsfwBack = document.getElementById('nsfwBack');
-
-let pendingNSFWShowcase = null;
-
-function showNSFWModal(showcase) {
-    pendingNSFWShowcase = showcase;
-    nsfwConfirm.checked = false;
-    nsfwProceed.disabled = true;
-    nsfwModal.classList.add('active');
-    document.body.style.overflow = 'hidden';
-}
-
-function hideNSFWModal() {
-    nsfwModal.classList.remove('active');
-    pendingNSFWShowcase = null;
-    document.body.style.overflow = '';
-}
-
-nsfwConfirm.addEventListener('change', () => {
-    nsfwProceed.disabled = !nsfwConfirm.checked;
-});
-
-nsfwProceed.addEventListener('click', () => {
-    if (pendingNSFWShowcase) {
-        sessionStorage.setItem('nsfw_consent_' + pendingNSFWShowcase.id, 'true');
-        hideNSFWModal();
-        openLightbox(0, pendingNSFWShowcase.images.map((src, i) => ({ src, title: pendingNSFWShowcase.title })), pendingNSFWShowcase.title, pendingNSFWShowcase.tools || []);
-    }
-});
-
-nsfwBack.addEventListener('click', () => {
-    hideNSFWModal();
-});
-
-nsfwModal.addEventListener('click', (e) => {
-    if (e.target === nsfwModal) {
-        hideNSFWModal();
-    }
-});
 
 // Render Functions
 function renderProfile() {
@@ -262,30 +280,26 @@ function renderShowcases() {
         showcasesGrid.innerHTML = '<p style="color: var(--text-secondary); text-align: center; grid-column: 1/-1;">No showcases available.</p>';
         return;
     }
+
+    const isVideoFile = (src) => /\.(mov|mp4|webm)$/i.test(src);
     
     showcasesGrid.innerHTML = visibleShowcases.map((showcase, index) => {
-        const previewImages = showcase.images.slice(0, 3);
+        const previewImages = showcase.images
+            .filter(img => !isVideoFile(img))
+            .slice(0, 3);
         const gridClass = previewImages.length >= 3 ? 'showcase-grid-2x2' : '';
         const toolsHtml = showcase.tools && showcase.tools.length > 0 
             ? `<div class="showcase-tools">${showcase.tools.map(t => `<span class="showcase-tool-badge">${t}</span>`).join('')}</div>` 
             : '';
-        const isNSFW = showcase.isNSFW;
-        const hasConsent = sessionStorage.getItem('nsfw_consent_' + showcase.id) === 'true';
-        const blurClass = isNSFW && !hasConsent ? 'nsfw-blur' : '';
-        const badgeHtml = isNSFW && !hasConsent 
-            ? `<div class="nsfw-badge-overlay"><div class="nsfw-badge-text">🌶 +18</div></div>` 
-            : '';
-        const dataAttrs = `data-is-nsfw="${isNSFW}" data-showcase-id="${showcase.id}"`;
         
         return `
-            <div class="showcase-card reveal reveal-delay-${(index % 3) + 1}" data-index="${index}" ${dataAttrs}>
+            <div class="showcase-card reveal reveal-delay-${(index % 3) + 1}" data-index="${index}">
                 <div class="showcase-preview" style="position: relative;">
                     <div class="${gridClass}">
                         ${previewImages.map((img, i) => `
-                            <img src="${img}" alt="${showcase.title}" class="preview-img ${blurClass}" data-img-index="${i}">
+                            <img src="${img}" alt="${showcase.title}" class="preview-img" data-img-index="${i}">
                         `).join('')}
                     </div>
-                    ${badgeHtml}
                 </div>
                 <div class="showcase-title">
                     <h3>${showcase.title}</h3>
@@ -301,12 +315,11 @@ function renderShowcases() {
     });
 }
 
-function renderGallery(filter = 'all') {
-    const filtered = filter === 'all' 
-        ? data.gallery 
-        : data.gallery.filter(item => item.category === filter);
+function renderGallery() {
+    const shuffledGallery = getRandomGallery(data.gallery);
+    currentGallery = shuffledGallery;
 
-    galleryGrid.innerHTML = filtered.map((item, index) => `
+    galleryGrid.innerHTML = shuffledGallery.map((item, index) => `
         <div class="gallery-item reveal reveal-delay-${(index % 4) + 1}" data-index="${index}">
             <img src="${item.src}" alt="${item.title}">
         </div>
@@ -335,8 +348,76 @@ function renderServices() {
     });
 }
 
+function renderAIVideos() {
+    const aiVideoGrid = document.getElementById('aiVideoGrid');
+    if (!aiVideoGrid) return;
+
+    aiVideoGrid.innerHTML = data.aiVideos.map((video, index) => `
+        <div class="ai-video-card ${video.ratio} reveal reveal-delay-${(index % 3) + 1}" 
+             data-video="${video.src}" 
+             data-title="${video.title}" 
+             data-tools="${video.tool}">
+            <video preload="metadata" muted loop playsinline>
+                <source src="${video.src}" type="video/mp4">
+            </video>
+            <div class="video-overlay">
+                <button class="play-btn" aria-label="Play video">▶</button>
+            </div>
+            <div class="video-info">
+                <div class="video-title">${video.title}</div>
+                <div class="video-tools">${video.tool}</div>
+            </div>
+        </div>
+    `).join('');
+
+    // Show first frame as thumbnail
+    aiVideoGrid.querySelectorAll('video').forEach(v => {
+        v.addEventListener('loadedmetadata', function() {
+            this.currentTime = 0.01;
+        });
+        v.addEventListener('seeked', function() {
+            this.pause();
+        }, { once: true });
+    });
+
+    // Hover: play video from start
+    aiVideoGrid.querySelectorAll('.ai-video-card').forEach(card => {
+        const video = card.querySelector('video');
+
+        card.addEventListener('mouseenter', () => {
+            if (video) {
+                video.currentTime = 0;
+                video.play().catch(() => {});
+            }
+        });
+
+        card.addEventListener('mouseleave', () => {
+            if (video) {
+                video.pause();
+                video.currentTime = 0;
+            }
+        });
+
+        // Click: open in lightbox
+        card.addEventListener('click', () => {
+            const videoSrc = card.dataset.video;
+            const videoTitle = card.dataset.title;
+            const videoTools = card.dataset.tools ? card.dataset.tools.split(',').map(t => t.trim()) : [];
+            if (videoSrc) {
+                openLightbox(0, [{ src: videoSrc, title: videoTitle }], videoTitle, videoTools);
+            }
+        });
+    });
+
+    document.querySelectorAll('.reveal').forEach(el => {
+        observer.observe(el);
+    });
+}
+
 // Navigation
 function handleScroll() {
+    if (!nav || !sections.length) return;
+    
     if (window.scrollY > 100) {
         nav.classList.add('scrolled');
     } else {
@@ -350,7 +431,7 @@ function handleScroll() {
             current = section.getAttribute('id');
         }
     });
-
+    
     document.querySelectorAll('.nav-links > li > a').forEach(link => {
         link.classList.remove('active');
         if (link.getAttribute('href') === `#${current}`) {
@@ -360,6 +441,11 @@ function handleScroll() {
 }
 
 window.addEventListener('scroll', handleScroll);
+window.addEventListener('load', () => {
+    handleScroll();
+    setTimeout(handleScroll, 100);
+    setTimeout(handleScroll, 500);
+});
 
 // Mobile Menu
 mobileMenuBtn.addEventListener('click', () => {
@@ -374,23 +460,30 @@ document.querySelectorAll('.nav-links a').forEach(link => {
     });
 });
 
-// Gallery Filter
-document.querySelectorAll('.filter-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        renderGallery(btn.dataset.filter);
-    });
-});
-
 // Lightbox
 let currentGalleryIndex = 0;
-let currentGallery = [];
+
+function isVideoFile(src) {
+    return /\.(mov|mp4|webm)$/i.test(src);
+}
 
 function openLightbox(index, gallery = data.gallery, title = '', tools = []) {
     currentGallery = gallery;
     currentGalleryIndex = index;
-    lightboxImage.src = currentGallery[currentGalleryIndex].src;
+    const currentSrc = currentGallery[currentGalleryIndex].src || currentGallery[currentGalleryIndex];
+    
+    if (isVideoFile(currentSrc)) {
+        lightboxImage.style.display = 'none';
+        lightboxVideo.style.display = 'block';
+        lightboxVideo.src = currentSrc;
+        lightboxVideo.play();
+    } else {
+        lightboxVideo.style.display = 'none';
+        lightboxVideo.pause();
+        lightboxImage.style.display = 'block';
+        lightboxImage.src = currentSrc;
+    }
+    
     lightboxTitle.textContent = title || '';
     lightboxCounter.textContent = `${currentGalleryIndex + 1} / ${currentGallery.length}`;
     
@@ -407,18 +500,44 @@ function openLightbox(index, gallery = data.gallery, title = '', tools = []) {
 
 function closeLightbox() {
     lightbox.classList.remove('active');
+    lightboxVideo.pause();
+    lightboxVideo.src = '';
     document.body.style.overflow = '';
 }
 
 function nextImage() {
     currentGalleryIndex = (currentGalleryIndex + 1) % currentGallery.length;
-    lightboxImage.src = currentGallery[currentGalleryIndex].src;
+    const currentSrc = currentGallery[currentGalleryIndex].src || currentGallery[currentGalleryIndex];
+    
+    if (isVideoFile(currentSrc)) {
+        lightboxImage.style.display = 'none';
+        lightboxVideo.style.display = 'block';
+        lightboxVideo.src = currentSrc;
+        lightboxVideo.play();
+    } else {
+        lightboxVideo.style.display = 'none';
+        lightboxVideo.pause();
+        lightboxImage.style.display = 'block';
+        lightboxImage.src = currentSrc;
+    }
     lightboxCounter.textContent = `${currentGalleryIndex + 1} / ${currentGallery.length}`;
 }
 
 function prevImage() {
     currentGalleryIndex = (currentGalleryIndex - 1 + currentGallery.length) % currentGallery.length;
-    lightboxImage.src = currentGallery[currentGalleryIndex].src;
+    const currentSrc = currentGallery[currentGalleryIndex].src || currentGallery[currentGalleryIndex];
+    
+    if (isVideoFile(currentSrc)) {
+        lightboxImage.style.display = 'none';
+        lightboxVideo.style.display = 'block';
+        lightboxVideo.src = currentSrc;
+        lightboxVideo.play();
+    } else {
+        lightboxVideo.style.display = 'none';
+        lightboxVideo.pause();
+        lightboxImage.style.display = 'block';
+        lightboxImage.src = currentSrc;
+    }
     lightboxCounter.textContent = `${currentGalleryIndex + 1} / ${currentGallery.length}`;
 }
 
@@ -441,9 +560,7 @@ galleryGrid.addEventListener('click', (e) => {
     const item = e.target.closest('.gallery-item');
     if (item) {
         const index = parseInt(item.dataset.index);
-        const filter = document.querySelector('.filter-btn.active').dataset.filter;
-        const filtered = filter === 'all' ? data.gallery : data.gallery.filter(i => i.category === filter);
-        openLightbox(index, filtered);
+        openLightbox(index, currentGallery);
     }
 });
 
@@ -465,13 +582,37 @@ showcasesGrid.addEventListener('click', (e) => {
         const showcase = visibleShowcases[index];
         
         if (showcase && showcase.images.length > 0) {
-            if (showcase.isNSFW && sessionStorage.getItem('nsfw_consent_' + showcase.id) !== 'true') {
-                showNSFWModal(showcase);
-            } else {
-                openLightbox(0, showcase.images.map((src, i) => ({ src, title: showcase.title })), showcase.title, showcase.tools || []);
-            }
+            openLightbox(0, showcase.images.map((src, i) => ({ src, title: showcase.title })), showcase.title, showcase.tools || []);
         }
     }
+});
+
+// Video Card Hover & Click
+document.querySelectorAll('.video-card').forEach(card => {
+    const video = card.querySelector('video');
+    
+    card.addEventListener('mouseenter', () => {
+        if (video) {
+            video.currentTime = 0;
+            video.play().catch(() => {});
+        }
+    });
+    
+    card.addEventListener('mouseleave', () => {
+        if (video) {
+            video.pause();
+            video.currentTime = 0;
+        }
+    });
+    
+    card.addEventListener('click', () => {
+        const videoSrc = card.dataset.video;
+        const videoTitle = card.dataset.title;
+        const videoTools = card.dataset.tools ? card.dataset.tools.split(',').map(t => t.trim()) : [];
+        if (videoSrc) {
+            openLightbox(0, [{ src: videoSrc, title: videoTitle }], videoTitle, videoTools);
+        }
+    });
 });
 
 // Contact Form with Formspree
@@ -552,6 +693,7 @@ document.addEventListener('DOMContentLoaded', () => {
     renderShowcases();
     renderGallery();
     renderServices();
+    renderAIVideos();
     initTextToggles();
 
     handleScroll();
@@ -559,6 +701,8 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('.reveal').forEach(el => {
         observer.observe(el);
     });
+
+    setTimeout(handleScroll, 100);
 });
 
 // Back to top

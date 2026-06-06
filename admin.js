@@ -373,7 +373,6 @@ function getDefaultShowcases() {
             title: 'Kamote Chips Branding',
             category: 'Food Product Design',
             tools: ['Ai', 'Ps'],
-            isNSFW: false,
             visible: true,
             images: [
                 'Elements/Designs/Food Product Design/(1) Primary Logo.jpg',
@@ -387,7 +386,6 @@ function getDefaultShowcases() {
             title: 'Passiflora Perfume',
             category: 'Health & Wellness',
             tools: ['Ai', 'Ps'],
-            isNSFW: false,
             visible: true,
             images: [
                 'Elements/Designs/Health and Wellness/(1) Artboard 19@2x.png',
@@ -404,32 +402,12 @@ function getDefaultShowcases() {
             title: 'Print Designs',
             category: 'Print',
             tools: ['Ai', 'Ps'],
-            isNSFW: false,
             visible: true,
             images: [
                 'Elements/Designs/Print Designs/Nmax ii color 1 variation.png',
                 'Elements/Designs/Print Designs/Nmax mock up.jpg',
                 'Elements/Designs/Print Designs/Shirt mockup.jpg',
                 'Elements/Designs/Print Designs/Shirt mockup 2.jpg'
-            ]
-        },
-        {
-            id: 4,
-            title: 'OFM AI Contents',
-            category: 'Generative AI',
-            tools: ['Seedream', 'Nano Banana', 'Higgsfield'],
-            isNSFW: true,
-            visible: true,
-            images: [
-                'Elements/🌶OFM - Generative AI (Explicit)/Asian Girl/hf_20260227_084939_cf4c5dc9-24c7-470b-bfab-736df78742e6.jpeg',
-                'Elements/🌶OFM - Generative AI (Explicit)/Asian Girl/hf_20260227_083132_b09553e3-9ae8-4592-8401-ffa7329ea321.jpeg',
-                'Elements/🌶OFM - Generative AI (Explicit)/Asian Girl/hf_20260227_083132_c19d0c36-b3f6-4489-ad7d-5efd5e75bff3.jpeg',
-                'Elements/🌶OFM - Generative AI (Explicit)/Latina Girl/seedream-i2i-1773811404667-0.png',
-                'Elements/🌶OFM - Generative AI (Explicit)/Latina Girl/seedream-i2i-1773811544408-0.png',
-                'Elements/🌶OFM - Generative AI (Explicit)/Latina Girl/seedream-i2i-1773811404306-1.png',
-                'Elements/🌶OFM - Generative AI (Explicit)/White Girl/seedream-i2i-1772188655245-1.png',
-                'Elements/🌶OFM - Generative AI (Explicit)/White Girl/seedream-i2i-1772189062112-0.png',
-                'Elements/🌶OFM - Generative AI (Explicit)/White Girl/seedream-i2i-1772191279662-1.png'
             ]
         }
     ];
@@ -605,11 +583,10 @@ function renderShowcasesAdmin(showcases) {
     }
     
     container.innerHTML = showcases.map((showcase, index) => {
-        const nsfwBadge = showcase.isNSFW ? '<span style="background: var(--accent-red); color: white; padding: 2px 8px; border-radius: 4px; font-size: 11px; margin-left: 8px;">🌶 +18</span>' : '';
         return `
         <div class="showcase-admin-item" data-index="${index}">
             <div class="showcase-admin-header">
-                <h4>${showcase.title}${nsfwBadge} <span style="color: var(--accent-orange); font-size: 12px;">(${showcase.category})</span></h4>
+                <h4>${showcase.title} <span style="color: var(--accent-orange); font-size: 12px;">(${showcase.category})</span></h4>
                 <div class="showcase-admin-actions">
                     <label class="toggle-switch" style="width: 40px; height: 22px;">
                         <input type="checkbox" ${showcase.visible ? 'checked' : ''} data-index="${index}" class="showcase-visibility">
@@ -698,7 +675,6 @@ document.getElementById('addShowcaseBtn').addEventListener('click', () => {
     const toolsRaw = document.getElementById('newShowcaseTools').value;
     const tools = toolsRaw ? toolsRaw.split(',').map(t => t.trim()).filter(t => t) : [];
     const visible = document.getElementById('newShowcaseVisible').checked;
-    const isNSFW = document.getElementById('newShowcaseNSFW').checked;
     
     if (!title) {
         showToast('Please enter a title', 'error');
@@ -716,7 +692,6 @@ document.getElementById('addShowcaseBtn').addEventListener('click', () => {
         title,
         category,
         tools,
-        isNSFW,
         visible,
         images: tempShowcaseImages
     });
@@ -729,7 +704,6 @@ document.getElementById('addShowcaseBtn').addEventListener('click', () => {
     document.getElementById('newShowcaseCategory').value = 'Branding';
     document.getElementById('newShowcaseTools').value = '';
     document.getElementById('newShowcaseVisible').checked = true;
-    document.getElementById('newShowcaseNSFW').checked = false;
     document.getElementById('showcaseTempImages').innerHTML = '';
     tempShowcaseImages = [];
     

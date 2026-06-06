@@ -11,36 +11,13 @@
     <link rel="icon" type="image/jpeg" href="Billy ID.jpg">
 </head>
 <body>
-    <!-- NSFW Warning Modal -->
-    <div class="nsfw-modal" id="nsfwModal">
-        <div class="nsfw-modal-content">
-            <div class="nsfw-icon">
-                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
-                    <line x1="12" y1="9" x2="12" y2="13"/>
-                    <line x1="12" y1="17" x2="12.01" y2="17"/>
-                </svg>
-            </div>
-            <h3>OFM AI Contents</h3>
-            <p>This project contains explicit NSFW contents.</p>
-            <p>I would recommend not entering this project if you are not under a OFM related industry.</p>
-            <div class="nsfw-checkbox">
-                <input type="checkbox" id="nsfwConfirm">
-                <label for="nsfwConfirm">Are you familiar with OFM/Fanvue related contents?</label>
-            </div>
-            <div class="nsfw-buttons">
-                <button class="btn btn-nsfw-proceed" id="nsfwProceed" disabled>Proceed</button>
-                <button class="btn btn-nsfw-back" id="nsfwBack">Go Back</button>
-            </div>
-        </div>
-    </div>
-
     <!-- Floating Navigation Bar -->
     <nav class="floating-nav">
         <a href="#" class="nav-logo gradient-text">BJC</a>
         <ul class="nav-links">
             <li><a href="#work" class="active">Work</a></li>
             <li><a href="#showcases">Showcases</a></li>
+            <li><a href="#aiVideos">AI Videos</a></li>
             <li><a href="#gallery">Moodboard</a></li>
             <li><a href="#about">About</a></li>
             <li><a href="#services">Services</a></li>
@@ -54,7 +31,6 @@
                     <a href="https://linkedin.com/in/iam-billycruzada/" target="_blank">LinkedIn</a>
                     <a href="https://behance.net/billyjoeCrzGraphx" target="_blank">Behance</a>
                     <a href="mailto:billyjoecruzada12@gmail.com">Email Me</a>
-                    <a href="admin.html" target="_blank">Admin Panel</a>
                 </div>
             </li>
         </ul>
@@ -67,10 +43,14 @@
 
     <!-- Hero Section -->
     <section class="hero" id="hero">
+        <video class="hero-video" autoplay muted loop playsinline poster="Elements/Video/Fall-back-image_hyperlapse.jpg">
+            <source src="Elements/Video/Hyperlapse.mp4" type="video/mp4">
+        </video>
+        <div class="hero-overlay"></div>
         <div class="container">
             <div class="hero-content">
                 <div class="hero-text">
-                    <p class="subtitle gradient-text">Graphic Designer | Photographer | Photo Editor | Generative AI Specialist</p>
+                    <p class="subtitle gradient-text">Graphic Designer | Video Editor | Photographer | Photo Editor | Generative AI Specialist</p>
                     <h1>Hi, I'm <span class="gradient-text">Billy Joe Cruzada</span></h1>
                     <div class="bio-wrapper">
                         <p class="bio" id="heroBio">Creative professional with 5+ years of experience specializing in brand identity, digital design, and creative direction. Passionate about transforming ideas into compelling visual stories.</p>
@@ -131,19 +111,61 @@
         </div>
     </section>
 
+    <!-- Color Grading Projects Section -->
+    <section class="video-edits" id="videoEdits">
+        <div class="container">
+            <div class="section-header reveal">
+                <p class="section-label">Video Editing</p>
+                <h2 class="section-title">Color Grading Projects</h2>
+            </div>
+            <div class="video-grid">
+                <div class="video-card reveal" data-video="Elements/Video/Colorgrading/Color grading process 001.mov" data-title="Color Grading Process 001" data-tools="DaVinci Resolve">
+                    <video preload="metadata" poster="Elements/Video/Colorgrading/Thumbnail for - Color grading process 001.PNG">
+                        <source src="Elements/Video/Colorgrading/Color grading process 001.mov" type="video/quicktime">
+                    </video>
+                    <div class="video-overlay">
+                        <button class="play-btn" aria-label="Play video">▶</button>
+                    </div>
+                    <div class="video-info">
+                        <div class="video-title">Color Grading Process 001</div>
+                        <div class="video-tools">DaVinci Resolve</div>
+                    </div>
+                </div>
+                <div class="video-card reveal" data-video="Elements/Video/Colorgrading/Day to night.mov" data-title="Day to Night" data-tools="DaVinci Resolve">
+                    <video preload="metadata" poster="Elements/Video/Colorgrading/Thumbnail for - Day to night.jpg">
+                        <source src="Elements/Video/Colorgrading/Day to night.mov" type="video/quicktime">
+                    </video>
+                    <div class="video-overlay">
+                        <button class="play-btn" aria-label="Play video">▶</button>
+                    </div>
+                    <div class="video-info">
+                        <div class="video-title">Day to Night</div>
+                        <div class="video-tools">DaVinci Resolve</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- AI Videos Section -->
+    <section class="ai-videos" id="aiVideos">
+        <div class="container">
+            <div class="section-header reveal">
+                <p class="section-label">AI Generated</p>
+                <h2 class="section-title">AI Videos & Motion</h2>
+            </div>
+            <div class="ai-video-grid" id="aiVideoGrid">
+                <!-- Populated by JavaScript -->
+            </div>
+        </div>
+    </section>
+
     <!-- Gallery/Moodboard Section -->
     <section class="gallery-section" id="gallery">
         <div class="container">
             <div class="section-header reveal">
                 <p class="section-label">Gallery</p>
                 <h2 class="section-title">Gallery & Moodboard</h2>
-            </div>
-            <div class="gallery-filters reveal">
-                <button class="filter-btn active" data-filter="all">All</button>
-                <button class="filter-btn" data-filter="portrait">Portraits</button>
-                <button class="filter-btn" data-filter="food">Food</button>
-                <button class="filter-btn" data-filter="street">Street</button>
-                <button class="filter-btn" data-filter="sports">Sports</button>
             </div>
             <div class="gallery-grid reveal" id="galleryGrid">
                 <!-- Populated by JavaScript -->
@@ -340,6 +362,7 @@
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
             </button>
             <img src="" alt="Gallery Image" id="lightboxImage" loading="lazy">
+            <video id="lightboxVideo" controls style="display: none;"></video>
             <button class="lightbox-nav lightbox-next" aria-label="Next">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
             </button>
