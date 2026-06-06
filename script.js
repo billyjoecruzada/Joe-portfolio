@@ -167,6 +167,7 @@ const defaultData = {
         { title: "Generative AI Content Creation", description: "Cutting-edge AI-generated imagery and content using state-of-the-art tools. Specializing in creative AI workflows for marketing, product visualization, and unique artistic expressions." }
     ],
     about: {
+        aboutImage: "joe-portrait.jpg",
         quote: "\"Design is not just what it looks like. Design is how it works.\"",
         bio: "I'm Billy Joe Cruzada, a passionate graphic designer and visual storyteller based in Tarlac, Philippines. With over 5 years of experience in the creative industry, I specialize in transforming ideas into compelling visual experiences.\n\nMy journey began with a fascination for how design can evoke emotions and communicate messages without words. Today, I work with brands and individuals to create visual solutions that not only look stunning but also deliver results.\n\nI believe every project is an opportunity to tell a unique story. Whether it's a brand identity that captures a company's essence, a photograph that freezes a perfect moment, or AI-generated artwork that pushes creative boundaries, I approach each challenge with dedication and creativity.\n\nWhen I'm not designing, you'll find me exploring new creative tools, experimenting with AI art, or capturing the world through my lens.",
         location: "Tarlac City, Philippines",
@@ -229,9 +230,7 @@ const sections = document.querySelectorAll('section');
 
 // Render Functions
 function renderProfile() {
-    heroProfileImage.src = data.profile.image;
     heroBio.textContent = data.profile.bio;
-    aboutProfileImage.src = data.profile.image;
     if (data.about.quote) aboutQuote.textContent = data.about.quote;
     if (data.about.bio) aboutBio.innerHTML = data.about.bio.replace(/\n/g, '<br>');
     if (data.about.location) aboutLocation.textContent = data.about.location;

@@ -233,7 +233,8 @@ document.querySelectorAll('[data-save]').forEach(btn => {
                 changes.push(`Location: ${location}`);
                 changes.push(`Bio visibility: ${bioVisible ? 'Shown' : 'Hidden'}`);
                 saveFunction = () => {
-                    const about = { quote, bio, location, bioVisible };
+                    const currentAbout = JSON.parse(localStorage.getItem('portfolio_about') || '{}');
+                    const about = { quote, bio, location, bioVisible, aboutImage: currentAbout.aboutImage || 'joe-portrait.jpg' };
                     localStorage.setItem('portfolio_about', JSON.stringify(about));
                     showToast('About section saved!');
                 };
@@ -424,6 +425,7 @@ function getDefaultServices() {
 
 function getDefaultAbout() {
     return {
+        aboutImage: 'joe-portrait.jpg',
         quote: 'Design is not just what it looks like. Design is how it works.',
         bio: 'Creative professional with 5+ years of experience...',
         location: 'Based on Tarlac, Philippines',
