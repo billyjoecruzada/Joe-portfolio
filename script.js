@@ -257,7 +257,7 @@ function renderSocial() {
 function renderFeatured() {
     featuredGrid.innerHTML = data.featured.map((item, index) => `
         <div class="project-card reveal reveal-delay-${(index % 5) + 1}" data-index="${index}">
-            <img src="${item.src}" alt="${item.title}">
+            <img src="${item.src}" alt="${item.title}" loading="lazy">
             <div class="overlay">
                 <h3>${item.title}</h3>
                 <span class="category">${item.category}</span>
@@ -265,9 +265,6 @@ function renderFeatured() {
         </div>
     `).join('');
 
-    document.querySelectorAll('.reveal').forEach(el => {
-        observer.observe(el);
-    });
 }
 
 function renderShowcases() {
@@ -277,8 +274,6 @@ function renderShowcases() {
         showcasesGrid.innerHTML = '<p style="color: var(--text-secondary); text-align: center; grid-column: 1/-1;">No showcases available.</p>';
         return;
     }
-
-    const isVideoFile = (src) => /\.(mov|mp4|webm)$/i.test(src);
     
     showcasesGrid.innerHTML = visibleShowcases.map((showcase, index) => {
         const previewImages = showcase.images
@@ -294,7 +289,7 @@ function renderShowcases() {
                 <div class="showcase-preview" style="position: relative;">
                     <div class="${gridClass}">
                         ${previewImages.map((img, i) => `
-                            <img src="${img}" alt="${showcase.title}" class="preview-img" data-img-index="${i}">
+                            <img src="${img}" alt="${showcase.title}" class="preview-img" data-img-index="${i}" loading="lazy">
                         `).join('')}
                     </div>
                 </div>
@@ -307,24 +302,69 @@ function renderShowcases() {
         `;
     }).join('');
 
-    document.querySelectorAll('.reveal').forEach(el => {
-        observer.observe(el);
-    });
 }
 
 function renderGallery() {
     const shuffledGallery = getRandomGallery(data.gallery);
     currentGallery = shuffledGallery;
+    const initialCount = 8;
+    const teaserCount = 3;
+    const totalVisible = initialCount + teaserCount;
+    const hasMore = shuffledGallery.length > totalVisible;
 
-    galleryGrid.innerHTML = shuffledGallery.map((item, index) => `
+    galleryGrid.innerHTML = shuffledGallery.slice(0, initialCount).map((item, index) => `
         <div class="gallery-item reveal reveal-delay-${(index % 4) + 1}" data-index="${index}">
-            <img src="${item.src}" alt="${item.title}">
+            <img src="${item.src}" alt="${item.title}" loading="lazy">
         </div>
     `).join('');
 
-    document.querySelectorAll('.reveal').forEach(el => {
-        observer.observe(el);
-    });
+    if (shuffledGallery.length > initialCount) {
+        const teaserItems = shuffledGallery.slice(initialCount, totalVisible);
+        galleryGrid.insertAdjacentHTML('beforeend', teaserItems.map((item, i) => {
+            const idx = initialCount + i;
+            return `
+                <div class="gallery-item reveal teaser reveal-delay-${(idx % 4) + 1}" data-index="${idx}">
+                    <img src="${item.src}" alt="${item.title}" loading="lazy">
+                </div>
+            `;
+        }).join(''));
+    }
+
+    const existingWrapper = document.querySelector('.gallery-show-more');
+    if (existingWrapper) existingWrapper.remove();
+
+    if (hasMore) {
+        const wrapper = document.createElement('div');
+        wrapper.className = 'gallery-show-more';
+        wrapper.innerHTML = `
+            <button class="gallery-show-more-btn">
+                See more
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            </button>
+        `;
+        galleryGrid.parentNode.appendChild(wrapper);
+
+        wrapper.querySelector('.gallery-show-more-btn').addEventListener('click', () => {
+            document.querySelectorAll('#galleryGrid .teaser').forEach(el => {
+                el.classList.remove('teaser');
+            });
+            const remaining = shuffledGallery.slice(totalVisible);
+            remaining.forEach((item, i) => {
+                const idx = totalVisible + i;
+                const div = document.createElement('div');
+                div.className = 'gallery-item appear';
+                div.style.animationDelay = `${i * 0.08}s`;
+                div.dataset.index = idx;
+                const img = document.createElement('img');
+                img.src = item.src;
+                img.alt = item.title;
+                img.loading = 'lazy';
+                div.appendChild(img);
+                galleryGrid.appendChild(div);
+            });
+            wrapper.remove();
+        });
+    }
 }
 
 function renderServices() {
@@ -340,9 +380,6 @@ function renderServices() {
         </div>
     `).join('');
 
-    document.querySelectorAll('.reveal').forEach(el => {
-        observer.observe(el);
-    });
 }
 
 function renderAIVideos() {
@@ -351,6 +388,7 @@ function renderAIVideos() {
 
     aiVideoGrid.innerHTML = data.aiVideos.map((video, index) => `
         <div class="ai-video-card ${video.ratio} reveal reveal-delay-${(index % 3) + 1}" 
+             data-index="${index}"
              data-video="${video.src}" 
              data-title="${video.title}" 
              data-tools="${video.tool}">
@@ -397,30 +435,19 @@ function renderAIVideos() {
 
         // Click: open in lightbox
         card.addEventListener('click', () => {
-            const videoSrc = card.dataset.video;
-            const videoTitle = card.dataset.title;
-            const videoTools = card.dataset.tools ? card.dataset.tools.split(',').map(t => t.trim()) : [];
-            if (videoSrc) {
-                openLightbox(0, [{ src: videoSrc, title: videoTitle }], videoTitle, videoTools);
+            const index = parseInt(card.dataset.index);
+            if (data.aiVideos[index]) {
+                openLightbox(index, data.aiVideos, data.aiVideos[index].title, [data.aiVideos[index].tool]);
             }
         });
     });
 
-    document.querySelectorAll('.reveal').forEach(el => {
-        observer.observe(el);
-    });
 }
 
 // Navigation
 function handleScroll() {
     if (!nav || !sections.length) return;
     
-    if (window.scrollY > 100) {
-        nav.classList.add('scrolled');
-    } else {
-        nav.classList.remove('scrolled');
-    }
-
     let current = '';
     sections.forEach(section => {
         const sectionTop = section.offsetTop - 150;
@@ -437,11 +464,18 @@ function handleScroll() {
     });
 }
 
-window.addEventListener('scroll', handleScroll);
+let ticking = false;
+window.addEventListener('scroll', () => {
+    if (!ticking) {
+        requestAnimationFrame(() => {
+            handleScroll();
+            ticking = false;
+        });
+        ticking = true;
+    }
+});
 window.addEventListener('load', () => {
     handleScroll();
-    setTimeout(handleScroll, 100);
-    setTimeout(handleScroll, 500);
 });
 
 // Mobile Menu
@@ -502,9 +536,9 @@ function closeLightbox() {
     document.body.style.overflow = '';
 }
 
-function nextImage() {
-    currentGalleryIndex = (currentGalleryIndex + 1) % currentGallery.length;
-    const currentSrc = currentGallery[currentGalleryIndex].src || currentGallery[currentGalleryIndex];
+function updateLightboxContent() {
+    const currentItem = currentGallery[currentGalleryIndex];
+    const currentSrc = currentItem.src || currentItem;
     
     if (isVideoFile(currentSrc)) {
         lightboxImage.style.display = 'none';
@@ -518,24 +552,28 @@ function nextImage() {
         lightboxImage.src = currentSrc;
     }
     lightboxCounter.textContent = `${currentGalleryIndex + 1} / ${currentGallery.length}`;
+    
+    if (currentItem.title) {
+        lightboxTitle.textContent = currentItem.title;
+    }
+    
+    const itemTools = currentItem.tools || (currentItem.tool ? [currentItem.tool] : []);
+    if (itemTools.length > 0) {
+        lightboxTools.innerHTML = itemTools.map(t => `<span class="lightbox-tool-badge">${t}</span>`).join('');
+        lightboxTools.style.display = 'flex';
+    } else {
+        lightboxTools.style.display = 'none';
+    }
+}
+
+function nextImage() {
+    currentGalleryIndex = (currentGalleryIndex + 1) % currentGallery.length;
+    updateLightboxContent();
 }
 
 function prevImage() {
     currentGalleryIndex = (currentGalleryIndex - 1 + currentGallery.length) % currentGallery.length;
-    const currentSrc = currentGallery[currentGalleryIndex].src || currentGallery[currentGalleryIndex];
-    
-    if (isVideoFile(currentSrc)) {
-        lightboxImage.style.display = 'none';
-        lightboxVideo.style.display = 'block';
-        lightboxVideo.src = currentSrc;
-        lightboxVideo.play();
-    } else {
-        lightboxVideo.style.display = 'none';
-        lightboxVideo.pause();
-        lightboxImage.style.display = 'block';
-        lightboxImage.src = currentSrc;
-    }
-    lightboxCounter.textContent = `${currentGalleryIndex + 1} / ${currentGallery.length}`;
+    updateLightboxContent();
 }
 
 document.querySelector('.lightbox-close').addEventListener('click', closeLightbox);
@@ -585,7 +623,7 @@ showcasesGrid.addEventListener('click', (e) => {
 });
 
 // Video Card Hover & Click
-document.querySelectorAll('.video-card').forEach(card => {
+document.querySelectorAll('.video-card').forEach((card, index) => {
     const video = card.querySelector('video');
     
     card.addEventListener('mouseenter', () => {
@@ -603,11 +641,14 @@ document.querySelectorAll('.video-card').forEach(card => {
     });
     
     card.addEventListener('click', () => {
-        const videoSrc = card.dataset.video;
-        const videoTitle = card.dataset.title;
-        const videoTools = card.dataset.tools ? card.dataset.tools.split(',').map(t => t.trim()) : [];
-        if (videoSrc) {
-            openLightbox(0, [{ src: videoSrc, title: videoTitle }], videoTitle, videoTools);
+        const cards = document.querySelectorAll('.video-card');
+        const allData = Array.from(cards).map(c => ({
+            src: c.dataset.video,
+            title: c.dataset.title,
+            tools: c.dataset.tools ? c.dataset.tools.split(',').map(t => t.trim()) : []
+        }));
+        if (allData[index] && allData[index].src) {
+            openLightbox(index, allData, allData[index].title, allData[index].tools);
         }
     });
 });

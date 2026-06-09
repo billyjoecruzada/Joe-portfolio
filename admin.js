@@ -288,34 +288,6 @@ function loadAdminData() {
     renderServicesAdmin(services);
     renderExperienceAdmin(experience);
 }
-    // Populate Profile
-    document.getElementById('adminName').value = profile.name;
-    document.getElementById('adminTitle').value = profile.title;
-    document.getElementById('adminBio').value = profile.bio;
-    if (profile.image && profile.image !== 'Billy ID.jpg') {
-        document.getElementById('profilePreview').src = profile.image;
-        document.getElementById('profilePreview').style.display = 'block';
-    }
-
-    // Populate Social
-    document.getElementById('adminInstagram').value = social.instagram;
-    document.getElementById('adminLinkedin').value = social.linkedin;
-    document.getElementById('adminBehance').value = social.behance;
-    document.getElementById('adminEmail').value = social.email;
-
-    // Populate About
-    document.getElementById('adminAboutQuote').value = about.quote || '';
-    document.getElementById('adminAboutBio').value = about.bio || '';
-    document.getElementById('adminAboutLocation').value = about.location || '';
-    document.getElementById('adminAboutBioVisible').checked = about.bioVisible !== false;
-
-    // Render Galleries
-    renderFeaturedGallery(featured);
-    renderGalleryAdmin(gallery);
-    renderShowcasesAdmin(showcases);
-    renderServicesAdmin(services);
-    renderExperienceAdmin(experience);
-}
 
 // Default Data
 function getDefaultProfile() {
