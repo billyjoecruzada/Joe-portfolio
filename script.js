@@ -308,7 +308,7 @@ function renderGallery() {
     const shuffledGallery = getRandomGallery(data.gallery);
     currentGallery = shuffledGallery;
     const initialCount = 8;
-    const teaserCount = 3;
+    const teaserCount = 4;
     const totalVisible = initialCount + teaserCount;
     const hasMore = shuffledGallery.length > totalVisible;
 
@@ -318,22 +318,28 @@ function renderGallery() {
         </div>
     `).join('');
 
-    if (shuffledGallery.length > initialCount) {
-        const teaserItems = shuffledGallery.slice(initialCount, totalVisible);
-        galleryGrid.insertAdjacentHTML('beforeend', teaserItems.map((item, i) => {
-            const idx = initialCount + i;
-            return `
-                <div class="gallery-item reveal teaser reveal-delay-${(idx % 4) + 1}" data-index="${idx}">
-                    <img src="${item.src}" alt="${item.title}" loading="lazy">
-                </div>
-            `;
-        }).join(''));
-    }
+    const existingTeasers = document.querySelector('.gallery-teasers');
+    if (existingTeasers) existingTeasers.remove();
 
     const existingWrapper = document.querySelector('.gallery-show-more');
     if (existingWrapper) existingWrapper.remove();
 
     if (hasMore) {
+        const teaserContainer = document.createElement('div');
+        teaserContainer.className = 'gallery-teasers';
+
+        const teaserItems = shuffledGallery.slice(initialCount, totalVisible);
+        teaserContainer.innerHTML = teaserItems.map((item, i) => {
+            const idx = initialCount + i;
+            return `
+                <div class="gallery-item teaser" data-index="${idx}">
+                    <img src="${item.src}" alt="${item.title}" loading="lazy">
+                </div>
+            `;
+        }).join('');
+
+        galleryGrid.parentNode.insertBefore(teaserContainer, galleryGrid.nextSibling);
+
         const wrapper = document.createElement('div');
         wrapper.className = 'gallery-show-more';
         wrapper.innerHTML = `
@@ -342,12 +348,16 @@ function renderGallery() {
                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
             </button>
         `;
-        galleryGrid.parentNode.appendChild(wrapper);
+        galleryGrid.parentNode.insertBefore(wrapper, teaserContainer.nextSibling);
 
         wrapper.querySelector('.gallery-show-more-btn').addEventListener('click', () => {
-            document.querySelectorAll('#galleryGrid .teaser').forEach(el => {
+            const teaserEls = teaserContainer.querySelectorAll('.gallery-item');
+            teaserEls.forEach(el => {
                 el.classList.remove('teaser');
+                galleryGrid.appendChild(el);
             });
+            teaserContainer.remove();
+
             const remaining = shuffledGallery.slice(totalVisible);
             remaining.forEach((item, i) => {
                 const idx = totalVisible + i;
